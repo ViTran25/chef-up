@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -118,7 +119,7 @@ final List<int> colorCodes = <int>[600, 500, 100];
           width: double.infinity,
           height: 100,
           child: ListView(
-              padding: const EdgeInsets.all(100),
+              padding: const EdgeInsets.all(8),
               children: <Widget>[
                 Text('List 1'),
                 Text('List 2'),
@@ -144,7 +145,45 @@ final List<int> colorCodes = <int>[600, 500, 100];
                         'OpenStreetMap contributors',
                         onTap: () => launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
                       ),
-                    ],)
+                    ],),
+                  MarkerLayer(
+                    markers : [
+                      Marker(
+                        width: 30.0,
+                        height: 30.0,
+                        point: LatLng(40.443490, -79.941640),
+                        child: Container(
+                          child: Icon(
+                            Icons.location_on,
+                            color: Color.fromARGB(255, 143, 54, 244),
+                            size: 30.0,
+                          ),
+                        )
+                      ),
+                      Marker(
+                        width: 30.0,
+                        height: 30.0,
+                        point: LatLng(40.45, -79.941640),
+                        child: Container(
+                          child: Icon(
+                            Icons.location_on,
+                            color: Color.fromARGB(255, 143, 54, 244),
+                            size: 30.0,
+                          ),
+                        )
+                      )
+                    ]                  
+                  ),
+                  PolylineLayer(
+                    polylines: [
+                      Polyline(
+                        points: [
+                          LatLng(40.45, -79.941640),
+                          LatLng(40.443490, -79.941640),
+                        ],
+                      )
+                    ],
+                  )
                 ],
               ),
           ),

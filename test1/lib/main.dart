@@ -180,7 +180,7 @@ class _Truckview extends State<Truckview> {
             child: const Text("Broadcast my Location"),
             onPressed: () {
               _getCurrentLocation().then((position) {
-                trucks.add(Marker(point: LatLng(position.latitude, position.longitude), width: 80.0, height: 80.0, child: Icon(Icons.location_on, color: Color.fromARGB(255, 136, 89, 1), size: 30.0)));
+                trucks.add(Marker(point: LatLng(position.latitude, position.longitude), width: 80.0, height: 80.0, child: Icon(Icons.local_shipping, color: Color.fromARGB(255, 136, 89, 1), size: 30.0)));
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Mapview(title: "map", trucks: trucks)),
@@ -313,7 +313,7 @@ class _Mapview extends State<Mapview> {
           Container(
             //Dimensions for the ListView
             width: double.infinity,
-            height: 170,
+            height: 250,
 
             child: ListView(
               //Items in the ListView
@@ -325,7 +325,7 @@ class _Mapview extends State<Mapview> {
                 fetchRoute(startLocation: userLocation, endLocation: trucks[0].point);
               },
               style: ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
+                  backgroundColor: MaterialStatePropertyAll<Color>(Color.fromARGB(255, 215, 126, 23)),
                   minimumSize: MaterialStateProperty.all(Size(130, 40)),
                   elevation: MaterialStateProperty.all(0),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -339,13 +339,13 @@ class _Mapview extends State<Mapview> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Image(image: AssetImage('images/MM.jpg')),
+                      Image(image: AssetImage('images/burger.jpg')),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                            Text("Miwa Kasumi", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
+                            Text("Bob's Burgers!", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
                             Text("      "),
-                            Text("The greatest Jujutsu Sorcerer of all time.") //Description of food truck
+                            Text("Delicious and Quick! Come try us out today!") //Description of food truck
         ]
     )
 ]
@@ -359,7 +359,7 @@ class _Mapview extends State<Mapview> {
                 fetchRoute(startLocation: userLocation, endLocation: trucks[1].point);
               },
               style: ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.blue),
+                  backgroundColor: MaterialStatePropertyAll<Color>(Color.fromARGB(255, 193, 152, 62)),
                   minimumSize: MaterialStateProperty.all(Size(130, 40)),
                   elevation: MaterialStateProperty.all(0),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -373,13 +373,13 @@ class _Mapview extends State<Mapview> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Image(image: AssetImage('images/MM.jpg')),
+                      Image(image: AssetImage('images/corndog.jpg')),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                            Text("Miwa Kasumi", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
+                            Text("Cassie's Corn Dogs", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
                             Text("      "),
-                            Text("The greatest Jujutsu Sorcerer of all time.") //Description of food truck
+                            Text("Pittsburgh's Authentic Korean Corn Dogs!") //Description of food truck
         ]
     )
 ]
@@ -393,7 +393,7 @@ class _Mapview extends State<Mapview> {
                 fetchRoute(startLocation: userLocation, endLocation: trucks[2].point);
               },
               style: ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.green),
+                  backgroundColor: MaterialStatePropertyAll<Color>(Color.fromARGB(255, 179, 176, 176)),
                   minimumSize: MaterialStateProperty.all(Size(130, 40)),
                   elevation: MaterialStateProperty.all(0),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -407,13 +407,13 @@ class _Mapview extends State<Mapview> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Image(image: AssetImage('images/MM.jpg')),
+                      Image(image: AssetImage('images/icecream.jpg')),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                            Text("Miwa Kasumi", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
+                            Text("Issac's Ice Cream", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
                             Text("      "),
-                            Text("The greatest Jujutsu Sorcerer of all time.") //Description of food truck
+                            Text("All the ice creams, all the flavors, we've got it!") //Description of food truck
         ]
     )
 ]
@@ -427,7 +427,7 @@ class _Mapview extends State<Mapview> {
                 fetchRoute(startLocation: userLocation, endLocation: trucks[3].point);
               },
               style: ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.grey),
+                  backgroundColor: MaterialStatePropertyAll<Color>(Color.fromARGB(255, 192, 225, 84)),
                   minimumSize: MaterialStateProperty.all(Size(130, 40)),
                   elevation: MaterialStateProperty.all(0),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -441,13 +441,13 @@ class _Mapview extends State<Mapview> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Image(image: AssetImage('images/MM.jpg')),
+                      Image(image: AssetImage('images/taco.jpg')),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                            Text("Miwa Kasumi", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
+                            Text("Tony's Tacos", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
                             Text("      "),
-                            Text("The greatest Jujutsu Sorcerer of all time.") //Description of food truck
+                            Text("Serving Tacos since 1988") //Description of food truck
         ]
     )
 ]

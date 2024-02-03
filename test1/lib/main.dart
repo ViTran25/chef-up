@@ -264,7 +264,7 @@ class _Mapview extends State<Mapview> {
                       point: truck1Location,
                       child: Icon(
                         Icons.local_shipping,
-                        color: Colors.red,
+                        color: Color.fromARGB(255, 215, 126, 23),
                         size: 30.0,
                       )
                     ),
@@ -274,7 +274,7 @@ class _Mapview extends State<Mapview> {
                       point: truck2Location,
                       child: Icon(
                         Icons.local_shipping,
-                        color: Colors.blue,
+                        color: Color.fromARGB(255, 193, 152, 62),
                         size: 30.0,
                       )
                     ),
@@ -284,8 +284,9 @@ class _Mapview extends State<Mapview> {
                       point: truck3Location,
                       child: Icon(
                         Icons.local_shipping,
-                        color: Colors.purple,
+                        color: Color.fromARGB(255, 80, 225, 248),
                         size: 30.0,
+                        
                       )
                     ),
                     Marker(
@@ -294,7 +295,7 @@ class _Mapview extends State<Mapview> {
                       point: truck4Location,
                       child: Icon(
                         Icons.local_shipping,
-                        color: Colors.orange,
+                        color: Color.fromARGB(255, 192, 225, 84),
                         size: 30.0,
                       )
                     ),
@@ -340,12 +341,17 @@ class _Mapview extends State<Mapview> {
                   ),
               child: 
                 Container(
+                  padding: EdgeInsets.symmetric(vertical: 10),
                   width: 5000,
                   height: 100,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Image(image: AssetImage('images/burger.jpg')),
+                    children: [ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: 
+                        Image.network(
+                          'images/burger.jpg')
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -374,12 +380,15 @@ class _Mapview extends State<Mapview> {
                   ),
               child: 
                 Container(
+                  padding: EdgeInsets.symmetric(vertical: 10),
                   width: 5000,
                   height: 100,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Image(image: AssetImage('images/corndog.jpg')),
+                    children: [ClipRRect(
+                      borderRadius: BorderRadius.circular(50),
+                      child: 
+                        Image.network('images/corndog.jpg')),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -408,12 +417,15 @@ class _Mapview extends State<Mapview> {
                   ),
               child: 
                 Container(
+                  padding: EdgeInsets.symmetric(vertical: 10),
                   width: 5000,
                   height: 100,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Image(image: AssetImage('images/icecream.jpg')),
+                    children: [ClipRRect(
+                      borderRadius: BorderRadius.circular(50),
+                      child: 
+                        Image.network('images/icecream.jpg')),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -442,18 +454,20 @@ class _Mapview extends State<Mapview> {
                   ),
               child: 
                 Container(
-                  width: 5000,
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  width: 1000,
                   height: 100,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Image(image: AssetImage('images/taco.jpg')),
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [ClipRRect(
+                      borderRadius: BorderRadius.circular(50),
+                      child: 
+                        Image.network('images/taco.jpg')),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                            Text("Tony's Tacos", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
-                            Text("      "),
-                            Text("Serving Tacos since 1988") //Description of food truck
+                            Text("Tony's Tacos      ", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
+                            Text("Serving Tacos since 1988                                    ") //Description of food truck
         ]
     )
 ]

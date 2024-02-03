@@ -1,5 +1,4 @@
-import 'dart:html';
-
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -136,8 +135,40 @@ class Mapview extends StatefulWidget {
 }
 
 class _Mapview extends State<Mapview> {
-
   _Mapview({this.trucks});
+
+  List<LatLng> routeCoordinates = [];
+ 
+  // This is the method for getting a route
+  Future<void> fetchRoute() async {
+    // Start point and end point
+    final LatLng startPoint = LatLng(40.444, -79.951640);
+    final LatLng endPoint = LatLng(40.443490, -79.941640);
+
+    // This is the OSRM api for finding a route between two points
+    final String apiUrl =
+        'http://router.project-osrm.org/route/v1/driving/${startPoint.longitude},${startPoint.latitude};${endPoint.longitude},${endPoint.latitude}?geometries=geojson';
+
+    // Get the response from OSRM server
+    final Response<dynamic> response = await Dio().get(apiUrl);
+
+    // Decode the response into a list of coordinates
+    if (response.statusCode == 200) {
+      final List<dynamic> coordinates = response.data['routes'][0]['geometry']['coordinates'];
+
+      for (var coordinate in coordinates) {
+        final double lat = coordinate[1];
+        final double lng = coordinate[0];
+        routeCoordinates.add(LatLng(lat, lng));
+      }
+
+      setState(() {
+        
+      });
+    } else {
+      throw Exception('Failed to fetch route');
+    }
+  }
   final trucks;
   @override
   Widget build(BuildContext context) {

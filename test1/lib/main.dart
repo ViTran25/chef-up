@@ -159,13 +159,12 @@ class _Truckview extends State<Truckview> {
     Future<Position> _getCurrentLocation() async {
 
       permission = await Geolocator.checkPermission();
+
       if(permission == LocationPermission.denied)
       {
         permission = await Geolocator.requestPermission();
       }
-
       return await Geolocator.getCurrentPosition();
-
     }
 
     return Scaffold(
@@ -180,7 +179,16 @@ class _Truckview extends State<Truckview> {
             child: const Text("Broadcast my Location"),
             onPressed: () {
               _getCurrentLocation().then((position) {
-                trucks.add(Marker(point: LatLng(position.latitude, position.longitude), width: 80.0, height: 80.0, child: Icon(Icons.local_shipping, color: Color.fromARGB(255, 136, 89, 1), size: 30.0)));
+                trucks.add(
+                  Marker(
+                    point: LatLng(position.latitude, position.longitude), 
+                    width: 30.0,
+                    height: 30.0,
+                    child: Icon(
+                      Icons.local_shipping, color: Color.fromARGB(255, 136, 89, 1)
+                    )
+                  )
+                );
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Mapview(title: "map", trucks: trucks)),

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
+import 'dart:convert';
 import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:dio/dio.dart';
+
+
 
 void main() {
   runApp(const MyApp());
@@ -61,8 +65,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final List<Marker> markers = [];
+  List<LatLng> routeCoordinates = [];
   int _counter = 0;
 
+  
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -73,37 +80,65 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
   }
+  Future<void> fetchRoute() async {
+    final LatLng startPoint = LatLng(40.45, -79.941640);
+    final LatLng endPoint = LatLng(40.443490, -79.941640);
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return FlutterMap(
-  //     options: MapOptions(
-  //       initialCenter: LatLng(40.443490, -79.941640),
-  //       initialZoom: 15,
-  //     ),
-  //     children: [
-  //       TileLayer(
-  //         urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-  //         userAgentPackageName: 'com.example.app',
-  //       ),
-  //       RichAttributionWidget(
-  //         attributions: [
-  //           TextSourceAttribution(
-  //             'OpenStreetMap contributors',
-  //             onTap: () => launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
-  //           ),
-  //         ],)
-  //     ],
-  //     );
-  //   // This method is rerun every time setState is called, for instance as done
-  //   // by the _incrementCounter method above.
-  //   //
-  //   // The Flutter framework has been optimized to make rerunning build methods
-  //   // fast, so that you can just rebuild anything that needs updating rather
-  //   // than having to individually change instances of widgets.
-  // }
-final List<String> entries = <String>['A', 'B', 'C'];
-final List<int> colorCodes = <int>[600, 500, 100];
+    final String apiUrl =
+        'http://router.project-osrm.org/route/v1/driving/${startPoint.longitude},${startPoint.latitude};${endPoint.longitude},${endPoint.latitude}?geometries=geojson';
+
+    final Response<dynamic> response = await Dio().get(apiUrl);
+
+    if (response.statusCode == 200) {
+      final List<dynamic> coordinates = response.data['routes'][0]['geometry']['coordinates'];
+
+      for (var coordinate in coordinates) {
+        final double lat = coordinate[1];
+        final double lng = coordinate[0];
+        routeCoordinates.add(LatLng(lat, lng));
+      }
+
+      setState(() {
+        markers.addAll([
+          Marker(
+            width: 30.0,
+            height: 30.0,
+            point: startPoint,
+            child: Container(
+              child: Icon(
+                Icons.location_on,
+                color: Color.fromARGB(255, 160, 15, 244),
+                size: 30.0,
+              ),
+            ),
+          ),
+          Marker(
+            width: 30.0,
+            height: 30.0,
+            point: endPoint,
+            child: Container(
+              child: Icon(
+                Icons.location_on,
+                color: Colors.blue,
+                size: 30.0,
+              ),
+            ),
+          ),
+        ]);
+      });
+    } else {
+      throw Exception('Failed to fetch route');
+    }
+  }
+  @override
+  void initState() {
+    super.initState();
+    fetchRoute();
+  }
+  
+
+  final List<String> entries = <String>['A', 'B', 'C'];
+  final List<int> colorCodes = <int>[600, 500, 100];
 
   @override
   Widget build(BuildContext context) {
@@ -147,40 +182,14 @@ final List<int> colorCodes = <int>[600, 500, 100];
                       ),
                     ],),
                   MarkerLayer(
-                    markers : [
-                      Marker(
-                        width: 30.0,
-                        height: 30.0,
-                        point: LatLng(40.443490, -79.941640),
-                        child: Container(
-                          child: Icon(
-                            Icons.location_on,
-                            color: Color.fromARGB(255, 143, 54, 244),
-                            size: 30.0,
-                          ),
-                        )
-                      ),
-                      Marker(
-                        width: 30.0,
-                        height: 30.0,
-                        point: LatLng(40.45, -79.941640),
-                        child: Container(
-                          child: Icon(
-                            Icons.location_on,
-                            color: Color.fromARGB(255, 143, 54, 244),
-                            size: 30.0,
-                          ),
-                        )
-                      )
-                    ]                  
+                    markers : markers,                 
                   ),
                   PolylineLayer(
                     polylines: [
                       Polyline(
-                        points: [
-                          LatLng(40.45, -79.941640),
-                          LatLng(40.443490, -79.941640),
-                        ],
+                        points: routeCoordinates,
+                        color: Colors.blue,
+                        strokeWidth: 3.0,
                       )
                     ],
                   )

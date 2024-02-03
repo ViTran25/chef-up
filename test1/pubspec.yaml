@@ -45,6 +45,8 @@ dependencies:
   routing_client_dart: ^0.5.4
   osrm: ^0.0.5
   flutter_osm_plugin: ^0.70.4
+  http: ^1.2.0
+  dio: ^5.4.0
 
 dev_dependencies:
   flutter_test:

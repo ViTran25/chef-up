@@ -80,9 +80,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   _MyHomePageState({this.trucks});
   final trucks;
+
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
         // TRY THIS: Try changing the color here to a specific color (to
@@ -93,53 +93,68 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ElevatedButton(
-              child: const Text('Trucker!'),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Truckview(title: "Truck", trucks: trucks)),
-                );
-              }
-            ),
-            ElevatedButton(
-              child: const Text('User!'),
-              onPressed: () {
-                // Navigate to second route when tapped.
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Mapview(title: "map", trucks: trucks)),
-                );
-              },
-            ),
-          ],
-        ),
+      body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('images/background.jpg'),
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.75), // Adjust opacity as needed
+                BlendMode.dstATop,
+              ),
+            )
+          ),
+          child: Center(
+          // Center is a layout widget. It takes a single child and positions it
+          // in the middle of the parent.
+          child: Column(
+            // Column is also a layout widget. It takes a list of children and
+            // arranges them vertically. By default, it sizes itself to fit its
+            // children horizontally, and tries to be as tall as its parent.
+            //
+            // Column has various properties to control how it sizes itself and
+            // how it positions its children. Here we use mainAxisAlignment to
+            // center the children vertically; the main axis here is the vertical
+            // axis because Columns are vertical (the cross axis would be
+            // horizontal).
+            //
+            // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
+            // action in the IDE, or press "p" in the console), to see the
+            // wireframe for each widget.
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              ElevatedButton(
+                child: const Text('Trucker!'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Truckview(title: "truck", trucks: trucks)),
+                  );
+                }
+              ),
+
+              Text("    "),
+
+              ElevatedButton(
+                child: const Text('User!'),
+                onPressed: () {
+                  // Navigate to second route when tapped.
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Mapview(title: "map", trucks: trucks)),
+                  );
+                },
+              ),
+            ],
+          ),
       ),
+      )
     );
   }
 }
 
 class Truckview extends StatefulWidget {
-  const Truckview({super.key, required this.title, this.trucks});
+  Truckview({super.key, required this.title, this.trucks});
   final String title;
   final trucks;
 
@@ -203,7 +218,7 @@ class _Truckview extends State<Truckview> {
 }
 
 class Mapview extends StatefulWidget {
-  const Mapview({super.key, required this.title, this.trucks});
+  Mapview({super.key, required this.title, this.trucks});
 
   final String title;
   final trucks;
@@ -342,12 +357,17 @@ class _Mapview extends State<Mapview> {
                   ),
               child: 
                 Container(
+                  padding: EdgeInsets.symmetric(vertical: 10),
                   width: 5000,
                   height: 100,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Image(image: AssetImage('images/burger.jpg')),
+                    children: [ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: 
+                        Image.network(
+                          'images/burger.jpg')
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -376,12 +396,15 @@ class _Mapview extends State<Mapview> {
                   ),
               child: 
                 Container(
+                  padding: EdgeInsets.symmetric(vertical: 10),
                   width: 5000,
                   height: 100,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Image(image: AssetImage('images/corndog.jpg')),
+                    children: [ClipRRect(
+                      borderRadius: BorderRadius.circular(50),
+                      child: 
+                        Image.network('images/corndog.jpg')),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -410,12 +433,15 @@ class _Mapview extends State<Mapview> {
                   ),
               child: 
                 Container(
+                  padding: EdgeInsets.symmetric(vertical: 10),
                   width: 5000,
                   height: 100,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Image(image: AssetImage('images/icecream.jpg')),
+                    children: [ClipRRect(
+                      borderRadius: BorderRadius.circular(50),
+                      child: 
+                        Image.network('images/icecream.jpg')),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -444,18 +470,20 @@ class _Mapview extends State<Mapview> {
                   ),
               child: 
                 Container(
-                  width: 5000,
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  width: 1000,
                   height: 100,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Image(image: AssetImage('images/taco.jpg')),
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [ClipRRect(
+                      borderRadius: BorderRadius.circular(50),
+                      child: 
+                        Image.network('images/taco.jpg')),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                            Text("Tony's Tacos", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
-                            Text("      "),
-                            Text("Serving Tacos since 1988") //Description of food truck
+                            Text("Tony's Tacos      ", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
+                            Text("Serving Tacos since 1988                                    ") //Description of food truck
         ]
     )
 ]

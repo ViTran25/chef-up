@@ -59,25 +59,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
 
 @override
 Widget build(BuildContext context) {
   return Scaffold(
+    //Add Header if needed
+  
+
+    //Main Body for the Web, note that it is written as a column
     body: Column(
+      //Direction of the column orientation
       verticalDirection: VerticalDirection.down,
+
+        //Items in the column
         children: [
+          //First item in the column, the flutter map
           Container(
             width:5000,
             height: 500,
@@ -103,17 +99,21 @@ Widget build(BuildContext context) {
   ),
 
 
+//The "Menu" for all the food trucks with their pictures and title and descriptions.
+//Edit the containers to will
       Container(
+        //Dimensions for the ListView
         width: double.infinity,
         height: 300,
 
         child: ListView(
+          //Items in the ListView
           children: [
             Container(
               width: 5000,
               height: 100,
               color: Colors.red,
-              child: Image(image: AssetImage('images/MM.jpg'),
+              child: Image(image: AssetImage('images/MM.jpg'), //NOTE!!! containers cannot have children, only a single child.
             )
           )
 ,
@@ -148,4 +148,5 @@ Widget build(BuildContext context) {
     )
   );
 }
+
 }

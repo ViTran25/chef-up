@@ -208,12 +208,6 @@ class _Mapview extends State<Mapview> {
                     }
                   ),
                 ),
-                Align(alignment: Alignment.topRight,
-                  child: ElevatedButton(
-                    child: Text('getPos'),
-                    onPressed: () async {
-                      _currentLocation = await _getCurrentLocation();
-                    },))
               ],
             )
           ),

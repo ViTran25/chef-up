@@ -132,6 +132,7 @@ class _Mapview extends State<Mapview> {
 
     void initState() {
     super.initState();
+   //_currentLocation = Position(latitude: 0, longitude: 0, timestamp: DateTime.now(), accuracy: 0, altitude: 0, altitudeAccuracy: 0, heading: 0, headingAccuracy: 0, speed: 0, speedAccuracy: 0);
     _getCurrentLocation().then((position) {
       setState(() {
         _currentLocation = position;
@@ -155,7 +156,10 @@ class _Mapview extends State<Mapview> {
         permission = await Geolocator.requestPermission();
       }
 
-      return await Geolocator.getCurrentPosition();
+      final newPosition = await Geolocator.getCurrentPosition();
+    
+
+      return newPosition;
     }
 
 

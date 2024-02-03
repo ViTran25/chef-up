@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -10,6 +12,14 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+  static const trucks = [
+      Marker(
+        point: LatLng(40.443490, -79.941640),
+        width: 80,
+        height: 80,
+        child: const Icon(Icons.location_on, color: Colors.blue, size: 30.0)
+      )
+    ];
 
   @override
   Widget build(BuildContext context) {
@@ -19,24 +29,27 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'ChefUp'),
+      home: const MyHomePage(title: 'ChefUp', trucks: trucks),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key, required this.title, this.trucks});
 
   final String title;
+  final trucks;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyHomePage> createState() => _MyHomePageState(trucks: trucks);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
+  _MyHomePageState({this.trucks});
+  final trucks;
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
         // TRY THIS: Try changing the color here to a specific color (to
@@ -71,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const Truckview(title: "truck")),
+                  MaterialPageRoute(builder: (context) => Truckview(title: "Truck", trucks: trucks)),
                 );
               }
             ),
@@ -81,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 // Navigate to second route when tapped.
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const Mapview(title: "map")),
+                  MaterialPageRoute(builder: (context) => Mapview(title: "map", trucks: trucks)),
                 );
               },
             ),
@@ -93,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class Truckview extends StatefulWidget {
-  const Truckview({super.key, required this.title});
+  const Truckview({super.key, required this.title, trucks});
   final String title;
 
   @override
@@ -113,15 +126,19 @@ class _Truckview extends State<Truckview> {
 }
 
 class Mapview extends StatefulWidget {
-  const Mapview({super.key, required this.title});
+  const Mapview({super.key, required this.title, this.trucks});
 
   final String title;
+  final trucks;
 
   @override
-  State<Mapview> createState() => _Mapview();
+  State<Mapview> createState() => _Mapview(trucks: trucks);
 }
 
 class _Mapview extends State<Mapview> {
+
+  _Mapview({this.trucks});
+  final trucks;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,7 +157,7 @@ class _Mapview extends State<Mapview> {
             height: 496,
             child: FlutterMap(
               
-              options: MapOptions(
+              options: const MapOptions(
                 initialCenter: LatLng(40.443490, -79.941640),
                 initialZoom: 17.2,
               ),
@@ -156,6 +173,9 @@ class _Mapview extends State<Mapview> {
                       onTap: () => launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
                     ),
                   ],
+                ),
+                MarkerLayer(
+                  markers: trucks
                 ),
                 Align(
                   alignment: Alignment.topLeft,
@@ -185,7 +205,7 @@ class _Mapview extends State<Mapview> {
                   width: 5000,
                   height: 100,
                   color: Colors.red,
-                  child: Image(image: AssetImage('images/MM.jpg'), //NOTE!!! containers cannot have children, only a single child.
+                  child: const Image(image: AssetImage('images/MM.jpg'), //NOTE!!! containers cannot have children, only a single child.
                     )
                 ),
 
@@ -193,21 +213,21 @@ class _Mapview extends State<Mapview> {
                   width: 5000,
                   height: 100,
                   color: Colors.white,
-                  child: Image(image: AssetImage('images/MM.jpg'),
+                  child: const Image(image: AssetImage('images/MM.jpg'),
                   )
                 ),
                 Container(
                   width: 5000,
                   height: 100,
                   color: Colors.green,
-                  child: Image(image: AssetImage('images/MM.jpg'),
+                  child: const Image(image: AssetImage('images/MM.jpg'),
                   )
                 ),
                 Container(
                   width: 5000,
                   height: 100,
                   color: Colors.black,
-                  child: Image(image: AssetImage('images/MM.jpg'),
+                  child: const Image(image: AssetImage('images/MM.jpg'),
                   )
                 ),
               ],

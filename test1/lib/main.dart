@@ -3,6 +3,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:dio/dio.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,7 +35,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,11 +125,89 @@ class Mapview extends StatefulWidget {
 }
 
 class _Mapview extends State<Mapview> {
+  LatLng userLocation = LatLng(40.443490, -79.941640);
+  LatLng truck1Location = LatLng(40.444990, -79.940640);
+  LatLng truck2Location = LatLng(40.444490, -79.943640);
+  LatLng truck3Location = LatLng(40.444019, -79.954590);
+  LatLng truck4Location = LatLng(40.445490, -79.942640);
+
+  // Routing function
+  final List<Marker> markers = [];
+  List<LatLng> routeCoordinates = [];
+ 
+  // This is the method for getting a route
+  Future<void> fetchRoute({
+    required LatLng startLocation,
+    required LatLng endLocation,
+  }) async {
+    // Start point and end point
+    final LatLng startPoint = startLocation;
+    final LatLng endPoint = endLocation;
+
+    // This is the OSRM api for finding a route between two points
+    final String apiUrl =
+        'http://router.project-osrm.org/route/v1/driving/${startPoint.longitude},${startPoint.latitude};${endPoint.longitude},${endPoint.latitude}?geometries=geojson';
+
+    // Get the response from OSRM server
+    final Response<dynamic> response = await Dio().get(apiUrl);
+
+    // Decode the response into a list of coordinates
+    if (response.statusCode == 200) {
+      final List<dynamic> coordinates = response.data['routes'][0]['geometry']['coordinates'];
+
+      for (var coordinate in coordinates) {
+        final double lat = coordinate[1];
+        final double lng = coordinate[0];
+        routeCoordinates.add(LatLng(lat, lng));
+      }
+
+      setState(() {
+        markers.addAll([
+          Marker(
+            width: 30.0,
+            height: 30.0,
+            point: startPoint,
+            child: Container(
+              child: Icon(
+                Icons.location_on,
+                color: Color.fromARGB(255, 160, 15, 244),
+                size: 30.0,
+              ),
+            ),
+          ),
+          Marker(
+            width: 30.0,
+            height: 30.0,
+            point: endPoint,
+            child: Container(
+              child: Icon(
+                Icons.location_on,
+                color: Colors.blue,
+                size: 30.0,
+              ),
+            ),
+          ),
+        ]);
+      });
+    } else {
+      throw Exception('Failed to fetch route');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchRoute(startLocation: userLocation, endLocation: truck1Location);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
     //Add Header if needed
-  
+      appBar: AppBar(
+        title: Text('Flutter Web Map'),
+        backgroundColor: Color.fromARGB(255, 55, 136, 105), // Optional background color,
+      ),
       //Main Body for the Web, note that it is written as a column
       body: Column(
         //Direction of the column orientation
@@ -169,6 +247,69 @@ class _Mapview extends State<Mapview> {
                     }
                   ),
                 ),
+                MarkerLayer(
+                  markers: [
+                    Marker(
+                      width: 30.0,
+                      height: 30.0,
+                      point: userLocation,
+                      child: Icon(
+                        Icons.location_on,
+                        color: Colors.pink,
+                        size: 30.0,
+                      )
+                    ),
+                    Marker(
+                      width: 30.0,
+                      height: 30.0,
+                      point: truck1Location,
+                      child: Icon(
+                        Icons.local_shipping,
+                        color: Colors.red,
+                        size: 30.0,
+                      )
+                    ),
+                    Marker(
+                      width: 30.0,
+                      height: 30.0,
+                      point: truck2Location,
+                      child: Icon(
+                        Icons.local_shipping,
+                        color: Colors.blue,
+                        size: 30.0,
+                      )
+                    ),
+                    Marker(
+                      width: 30.0,
+                      height: 30.0,
+                      point: truck3Location,
+                      child: Icon(
+                        Icons.local_shipping,
+                        color: Colors.purple,
+                        size: 30.0,
+                      )
+                    ),
+                    Marker(
+                      width: 30.0,
+                      height: 30.0,
+                      point: truck4Location,
+                      child: Icon(
+                        Icons.local_shipping,
+                        color: Colors.orange,
+                        size: 30.0,
+                      )
+                    ),
+                  ]
+                ),
+                PolylineLayer(
+                    polylines: [
+                      Polyline(
+                        points: routeCoordinates,
+                        color: Colors.blue,
+                        strokeWidth: 3.0,
+                      )
+                    ],
+                ),
               ],
             )
           ),
@@ -179,14 +320,17 @@ class _Mapview extends State<Mapview> {
           Container(
             //Dimensions for the ListView
             width: double.infinity,
-            height: 300,
+            height: 170,
 
             child: ListView(
               //Items in the ListView
               children: [
 
             ElevatedButton(
-              onPressed: (){},
+              onPressed: (){
+                routeCoordinates.clear();
+                fetchRoute(startLocation: userLocation, endLocation: truck1Location);
+              },
               style: ButtonStyle(
                   backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
                   minimumSize: MaterialStateProperty.all(Size(130, 40)),
@@ -217,9 +361,12 @@ class _Mapview extends State<Mapview> {
       ),
 
             ElevatedButton(
-              onPressed: (){},
+              onPressed: (){
+                routeCoordinates.clear();
+                fetchRoute(startLocation: userLocation, endLocation: truck2Location);
+              },
               style: ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.white),
+                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.blue),
                   minimumSize: MaterialStateProperty.all(Size(130, 40)),
                   elevation: MaterialStateProperty.all(0),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -248,7 +395,10 @@ class _Mapview extends State<Mapview> {
       ),
 
             ElevatedButton(
-              onPressed: (){},
+              onPressed: (){
+                routeCoordinates.clear();
+                fetchRoute(startLocation: userLocation, endLocation: truck3Location);
+              },
               style: ButtonStyle(
                   backgroundColor: MaterialStatePropertyAll<Color>(Colors.green),
                   minimumSize: MaterialStateProperty.all(Size(130, 40)),
@@ -279,7 +429,10 @@ class _Mapview extends State<Mapview> {
       ),
 
             ElevatedButton(
-              onPressed: (){},
+              onPressed: (){
+                routeCoordinates.clear();
+                fetchRoute(startLocation: userLocation, endLocation: truck4Location);
+              },
               style: ButtonStyle(
                   backgroundColor: MaterialStatePropertyAll<Color>(Colors.grey),
                   minimumSize: MaterialStateProperty.all(Size(130, 40)),

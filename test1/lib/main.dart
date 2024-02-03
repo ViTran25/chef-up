@@ -133,7 +133,8 @@ Widget build(BuildContext context) {
                             Text("Miwa Kasumi", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
                             Text("      "),
                             Text("The greatest Jujutsu Sorcerer of all time.") //Description of food truck
-])
+        ]
+    )
 ]
           )
         )

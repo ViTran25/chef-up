@@ -109,37 +109,134 @@ Widget build(BuildContext context) {
         child: ListView(
           //Items in the ListView
           children: [
-            Container(
-              width: 5000,
-              height: 100,
-              color: Colors.red,
-              child: Image(image: AssetImage('images/MM.jpg'), //NOTE!!! containers cannot have children, only a single child.
-            )
+            ElevatedButton(
+              onPressed: (){},
+              style: ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
+                  minimumSize: MaterialStateProperty.all(Size(130, 40)),
+                  elevation: MaterialStateProperty.all(0),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),)),
+                  ),
+              child: 
+                Container(
+                  width: 5000,
+                  height: 100,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Image(image: AssetImage('images/MM.jpg')),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                            Text("Miwa Kasumi", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
+                            Text("      "),
+                            Text("The greatest Jujutsu Sorcerer of all time.") //Description of food truck
+])
+]
           )
-,
-            Container(
-              width: 5000,
-              height: 100,
-              color: Colors.white,
-              child: Image(image: AssetImage('images/MM.jpg'),
-            )
-          ),
-            Container(
-              width: 5000,
-              height: 100,
-              color: Colors.green,
-              child: Image(image: AssetImage('images/MM.jpg'),
-            )
-          ),
-            Container(
-              width: 5000,
-              height: 100,
-              color: Colors.black,
-              child: Image(image: AssetImage('images/MM.jpg'),
-            )
-          ),
+        )
+      ),
+
+            ElevatedButton(
+              onPressed: (){},
+              style: ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
+                  minimumSize: MaterialStateProperty.all(Size(130, 40)),
+                  elevation: MaterialStateProperty.all(0),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),)),
+                  ),
+              child: 
+                Container(
+                  width: 5000,
+                  height: 100,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Image(image: AssetImage('images/MM.jpg')),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                            Text("Miwa Kasumi", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
+                            Text("      "),
+                            Text("The greatest Jujutsu Sorcerer of all time.") //Description of food truck
+])
+]
+          )
+        )
+      ),
           
-          
+            ElevatedButton(
+              onPressed: (){},
+              style: ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
+                  minimumSize: MaterialStateProperty.all(Size(130, 40)),
+                  elevation: MaterialStateProperty.all(0),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),)),
+                  ),
+              child: 
+                Container(
+                  width: 5000,
+                  height: 100,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Image(image: AssetImage('images/MM.jpg')),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                            Text("Miwa Kasumi", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
+                            Text("      "),
+                            Text("The greatest Jujutsu Sorcerer of all time.") //Description of food truck
+])
+]
+          )
+        )
+      ),
+
+
+            ElevatedButton(
+              onPressed: (){},
+              style: ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
+                  minimumSize: MaterialStateProperty.all(Size(130, 40)),
+                  elevation: MaterialStateProperty.all(0),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),)),
+                  ),
+              child: 
+                Container(
+                  width: 5000,
+                  height: 100,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Image(image: AssetImage('images/MM.jpg')),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                            Text("Miwa Kasumi", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
+                            Text("      "),
+                            Text("The greatest Jujutsu Sorcerer of all time.") //Description of food truck
+])
+]
+          )
+        )
+      ),
+
+
+
+
+
+
+
+
           ],
         ),
       )

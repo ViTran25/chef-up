@@ -47,50 +47,62 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ElevatedButton(
-              child: const Text('Trucker!'),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Truckview(title: "truck")),
-                );
-              }
-            ),
+      body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('images/background.jpg'),
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.75), // Adjust opacity as needed
+                BlendMode.dstATop,
+              ),
+            )
+          ),
+          child: Center(
+          // Center is a layout widget. It takes a single child and positions it
+          // in the middle of the parent.
+          child: Column(
+            // Column is also a layout widget. It takes a list of children and
+            // arranges them vertically. By default, it sizes itself to fit its
+            // children horizontally, and tries to be as tall as its parent.
+            //
+            // Column has various properties to control how it sizes itself and
+            // how it positions its children. Here we use mainAxisAlignment to
+            // center the children vertically; the main axis here is the vertical
+            // axis because Columns are vertical (the cross axis would be
+            // horizontal).
+            //
+            // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
+            // action in the IDE, or press "p" in the console), to see the
+            // wireframe for each widget.
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              ElevatedButton(
+                child: const Text('Trucker!'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Truckview(title: "truck")),
+                  );
+                }
+              ),
 
-            Text("    "),
+              Text("    "),
 
-            ElevatedButton(
-              child: const Text('User!'),
-              onPressed: () {
-                // Navigate to second route when tapped.
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Mapview(title: "map")),
-                );
-              },
-            ),
-          ],
-        ),
+              ElevatedButton(
+                child: const Text('User!'),
+                onPressed: () {
+                  // Navigate to second route when tapped.
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Mapview(title: "map")),
+                  );
+                },
+              ),
+            ],
+          ),
       ),
+      )
     );
   }
 }
@@ -197,7 +209,6 @@ class _Mapview extends State<Mapview> {
   @override
   void initState() {
     super.initState();
-    fetchRoute(startLocation: userLocation, endLocation: truck1Location);
   }
 
   @override
@@ -218,7 +229,7 @@ class _Mapview extends State<Mapview> {
           //First item in the column, the flutter map
           Container(
             width:5000,
-            height: 496,
+            height: 430,
             child: FlutterMap(
               
               options: MapOptions(
@@ -254,7 +265,7 @@ class _Mapview extends State<Mapview> {
                       height: 30.0,
                       point: userLocation,
                       child: Icon(
-                        Icons.location_on,
+                        Icons.person,
                         color: Colors.pink,
                         size: 30.0,
                       )

@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
         point: LatLng(40.443490, -79.941640),
         width: 80,
         height: 80,
-        child: const Icon(Icons.location_on, color: Colors.blue, size: 30.0)
+        child: Icon(Icons.location_on, color: Color.fromARGB(255, 136, 89, 1), size: 30.0)
       )
     ];
 
@@ -105,21 +105,57 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class Truckview extends StatefulWidget {
-  const Truckview({super.key, required this.title, trucks});
+  const Truckview({super.key, required this.title, this.trucks});
   final String title;
+  final trucks;
 
   @override
-  State<Truckview> createState() => _Truckview();
+  State<Truckview> createState() => _Truckview(trucks: trucks);
 }
 
 class _Truckview extends State<Truckview> {
+  _Truckview({this.trucks});
+  final trucks;
+
+  late bool servicePermission = false;
+  late LocationPermission permission;
   @override
   Widget build(BuildContext context) {
+
+    Future<Position> _getCurrentLocation() async {
+
+      permission = await Geolocator.checkPermission();
+      if(permission == LocationPermission.denied)
+      {
+        permission = await Geolocator.requestPermission();
+      }
+
+      return await Geolocator.getCurrentPosition();
+
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
+      body: Center(
+        child: Align(
+          alignment: Alignment.center,
+          child: ElevatedButton(
+            child: const Text("Broadcast my Location"),
+            onPressed: () {
+              _getCurrentLocation().then((position) {
+                trucks.add(Marker(point: LatLng(position.latitude, position.longitude), width: 80.0, height: 80.0, child: Icon(Icons.location_on, color: Color.fromARGB(255, 136, 89, 1), size: 30.0)));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Mapview(title: "map", trucks: trucks)),
+                );
+              });
+            }
+          )
+        )
+      )
     );
   }
 }

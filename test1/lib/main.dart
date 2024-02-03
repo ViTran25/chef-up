@@ -80,15 +80,20 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
   }
+  // This is the method for getting a route
   Future<void> fetchRoute() async {
-    final LatLng startPoint = LatLng(40.45, -79.941640);
+    // Start point and end point
+    final LatLng startPoint = LatLng(40.444, -79.951640);
     final LatLng endPoint = LatLng(40.443490, -79.941640);
 
+    // This is the OSRM api for finding a route between two points
     final String apiUrl =
         'http://router.project-osrm.org/route/v1/driving/${startPoint.longitude},${startPoint.latitude};${endPoint.longitude},${endPoint.latitude}?geometries=geojson';
 
+    // Get the response from OSRM server
     final Response<dynamic> response = await Dio().get(apiUrl);
 
+    // Decode the response into a list of coordinates
     if (response.statusCode == 200) {
       final List<dynamic> coordinates = response.data['routes'][0]['geometry']['coordinates'];
 
@@ -130,16 +135,18 @@ class _MyHomePageState extends State<MyHomePage> {
       throw Exception('Failed to fetch route');
     }
   }
+
   @override
   void initState() {
     super.initState();
     fetchRoute();
   }
   
-
+  // I don't what are those for
   final List<String> entries = <String>['A', 'B', 'C'];
   final List<int> colorCodes = <int>[600, 500, 100];
 
+  // The very top widget
   @override
   Widget build(BuildContext context) {
     return Scaffold(

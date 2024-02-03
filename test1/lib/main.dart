@@ -74,10 +74,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
 @override
 Widget build(BuildContext context) {
-  return FlutterMap(
-    options: MapOptions(
-      initialCenter: LatLng(51.509364, -0.128928),
-      initialZoom: 9.2,
+  return Scaffold(
+    body: Column(
+      verticalDirection: VerticalDirection.down,
+        children: [
+          Container(
+            width:5000,
+            height: 500,
+            child: FlutterMap(
+                   options: MapOptions(
+                   initialCenter: LatLng(40.443490, -79.941640),
+                   initialZoom: 17.2,
     ),
     children: [
       TileLayer(
@@ -91,8 +98,54 @@ Widget build(BuildContext context) {
             onTap: () => launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
           ),
         ],
-      ),
-    ],
+      ),],
+      )
+  ),
+
+
+      Container(
+        width: double.infinity,
+        height: 300,
+
+        child: ListView(
+          children: [
+            Container(
+              width: 5000,
+              height: 100,
+              color: Colors.red,
+              child: Image(image: AssetImage('images/MM.jpg'),
+            )
+          )
+,
+            Container(
+              width: 5000,
+              height: 100,
+              color: Colors.white,
+              child: Image(image: AssetImage('images/MM.jpg'),
+            )
+          ),
+            Container(
+              width: 5000,
+              height: 100,
+              color: Colors.green,
+              child: Image(image: AssetImage('images/MM.jpg'),
+            )
+          ),
+            Container(
+              width: 5000,
+              height: 100,
+              color: Colors.black,
+              child: Image(image: AssetImage('images/MM.jpg'),
+            )
+          ),
+          
+          
+          ],
+        ),
+      )
+
+      ]
+    )
   );
 }
 }

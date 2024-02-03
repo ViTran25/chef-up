@@ -73,32 +73,84 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   return FlutterMap(
+  //     options: MapOptions(
+  //       initialCenter: LatLng(40.443490, -79.941640),
+  //       initialZoom: 15,
+  //     ),
+  //     children: [
+  //       TileLayer(
+  //         urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+  //         userAgentPackageName: 'com.example.app',
+  //       ),
+  //       RichAttributionWidget(
+  //         attributions: [
+  //           TextSourceAttribution(
+  //             'OpenStreetMap contributors',
+  //             onTap: () => launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
+  //           ),
+  //         ],)
+  //     ],
+  //     );
+  //   // This method is rerun every time setState is called, for instance as done
+  //   // by the _incrementCounter method above.
+  //   //
+  //   // The Flutter framework has been optimized to make rerunning build methods
+  //   // fast, so that you can just rebuild anything that needs updating rather
+  //   // than having to individually change instances of widgets.
+  // }
+final List<String> entries = <String>['A', 'B', 'C'];
+final List<int> colorCodes = <int>[600, 500, 100];
+
   @override
   Widget build(BuildContext context) {
-    return FlutterMap(
-      options: MapOptions(
-        initialCenter: LatLng(40.443490, -79.941640),
-        initialZoom: 15,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Flutter Web Map'),
+        backgroundColor: Color.fromARGB(255, 55, 136, 105), // Optional background color,
       ),
-      children: [
-        TileLayer(
-          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          userAgentPackageName: 'com.example.app',
-        ),
-        RichAttributionWidget(
-          attributions: [
-            TextSourceAttribution(
-              'OpenStreetMap contributors',
-              onTap: () => launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
+      body: Column(
+        verticalDirection: VerticalDirection.up,
+        children: [
+          Container(
+          width: double.infinity,
+          height: 100,
+          child: ListView(
+              padding: const EdgeInsets.all(100),
+              children: <Widget>[
+                Text('List 1'),
+                Text('List 2'),
+              ],
             ),
-          ],)
-      ],
-      );
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+          ),
+          Container(
+            width: double.infinity,
+            height: 500,
+            child: FlutterMap(
+                options: MapOptions(
+                  initialCenter: LatLng(40.443490, -79.941640),
+                  initialZoom: 15,
+                ),
+                children: [
+                  TileLayer(
+                    urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    userAgentPackageName: 'com.example.app',
+                  ),
+                  RichAttributionWidget(
+                    attributions: [
+                      TextSourceAttribution(
+                        'OpenStreetMap contributors',
+                        onTap: () => launchUrl(Uri.parse('https://openstreetmap.org/copyright')),
+                      ),
+                    ],)
+                ],
+              ),
+          ),
+        ],
+        )
+    );
   }
+
 }

@@ -13,11 +13,45 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   static const trucks = [
       Marker(
-        point: LatLng(40.443490, -79.941640),
-        width: 80,
-        height: 80,
-        child: Icon(Icons.location_on, color: Color.fromARGB(255, 136, 89, 1), size: 30.0)
-      )
+        width: 30.0,
+        height: 30.0,
+        point: LatLng(40.444990, -79.940640),
+        child: Icon(
+          Icons.local_shipping,
+          color: Colors.red,
+          size: 30.0,
+        )
+      ),
+      Marker(
+        width: 30.0,
+        height: 30.0,
+        point: LatLng(40.444490, -79.943640),
+        child: Icon(
+          Icons.local_shipping,
+          color: Colors.blue,
+          size: 30.0,
+        )
+      ),
+      Marker(
+        width: 30.0,
+        height: 30.0,
+        point: LatLng(40.444019, -79.954590),
+        child: Icon(
+          Icons.local_shipping,
+          color: Colors.purple,
+          size: 30.0,
+        )
+      ),
+      Marker(
+        width: 30.0,
+        height: 30.0,
+        point: LatLng(40.445490, -79.942640),
+        child: Icon(
+          Icons.local_shipping,
+          color: Colors.orange,
+          size: 30.0,
+        )
+      ),
     ];
 
   @override
@@ -171,15 +205,19 @@ class Mapview extends StatefulWidget {
 }
 
 class _Mapview extends State<Mapview> {
+  LatLng userLocation = LatLng(40.443490, -79.941640);
   _Mapview({this.trucks});
 
   List<LatLng> routeCoordinates = [];
  
   // This is the method for getting a route
-  Future<void> fetchRoute() async {
+  Future<void> fetchRoute({
+    required LatLng startLocation,
+    required LatLng endLocation,
+  }) async {
     // Start point and end point
-    final LatLng startPoint = LatLng(40.444, -79.951640);
-    final LatLng endPoint = LatLng(40.443490, -79.941640);
+    final LatLng startPoint = startLocation;
+    final LatLng endPoint = endLocation;
 
     // This is the OSRM api for finding a route between two points
     final String apiUrl =
@@ -197,13 +235,15 @@ class _Mapview extends State<Mapview> {
         final double lng = coordinate[0];
         routeCoordinates.add(LatLng(lat, lng));
       }
-
-      setState(() {
-        
-      });
     } else {
       throw Exception('Failed to fetch route');
     }
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
   }
   final trucks;
   @override
@@ -242,7 +282,8 @@ class _Mapview extends State<Mapview> {
                   ],
                 ),
                 MarkerLayer(
-                  markers: trucks
+                  markers: [
+                  Marker(point: userLocation, width: 30.0, height: 30.0, child: Icon(Icons.person)), ... trucks]
                 ),
                 Align(
                   alignment: Alignment.topLeft,
@@ -252,6 +293,15 @@ class _Mapview extends State<Mapview> {
                       Navigator.pop(context);
                     }
                   ),
+                ),
+                PolylineLayer(
+                    polylines: [
+                      Polyline(
+                        points: routeCoordinates,
+                        color: Colors.blue,
+                        strokeWidth: 3.0,
+                      )
+                    ],
                 ),
               ],
             )
@@ -263,40 +313,149 @@ class _Mapview extends State<Mapview> {
           Container(
             //Dimensions for the ListView
             width: double.infinity,
-            height: 300,
+            height: 170,
 
             child: ListView(
               //Items in the ListView
               children: [
-                Container(
-                  width: 5000,
-                  height: 100,
-                  color: Colors.red,
-                  child: const Image(image: AssetImage('images/MM.jpg'), //NOTE!!! containers cannot have children, only a single child.
-                    )
-                ),
 
+            ElevatedButton(
+              onPressed: (){
+                routeCoordinates.clear();
+                fetchRoute(startLocation: userLocation, endLocation: trucks[0].point);
+              },
+              style: ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
+                  minimumSize: MaterialStateProperty.all(Size(130, 40)),
+                  elevation: MaterialStateProperty.all(0),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),)),
+                  ),
+              child: 
                 Container(
                   width: 5000,
                   height: 100,
-                  color: Colors.white,
-                  child: const Image(image: AssetImage('images/MM.jpg'),
-                  )
-                ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Image(image: AssetImage('images/MM.jpg')),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                            Text("Miwa Kasumi", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
+                            Text("      "),
+                            Text("The greatest Jujutsu Sorcerer of all time.") //Description of food truck
+        ]
+    )
+]
+          )
+        )
+      ),
+
+            ElevatedButton(
+              onPressed: (){
+                routeCoordinates.clear();
+                fetchRoute(startLocation: userLocation, endLocation: trucks[1].point);
+              },
+              style: ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.blue),
+                  minimumSize: MaterialStateProperty.all(Size(130, 40)),
+                  elevation: MaterialStateProperty.all(0),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),)),
+                  ),
+              child: 
                 Container(
                   width: 5000,
                   height: 100,
-                  color: Colors.green,
-                  child: const Image(image: AssetImage('images/MM.jpg'),
-                  )
-                ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Image(image: AssetImage('images/MM.jpg')),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                            Text("Miwa Kasumi", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
+                            Text("      "),
+                            Text("The greatest Jujutsu Sorcerer of all time.") //Description of food truck
+        ]
+    )
+]
+          )
+        )
+      ),
+
+            ElevatedButton(
+              onPressed: (){
+                routeCoordinates.clear();
+                fetchRoute(startLocation: userLocation, endLocation: trucks[2].point);
+              },
+              style: ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.green),
+                  minimumSize: MaterialStateProperty.all(Size(130, 40)),
+                  elevation: MaterialStateProperty.all(0),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),)),
+                  ),
+              child: 
                 Container(
                   width: 5000,
                   height: 100,
-                  color: Colors.black,
-                  child: const Image(image: AssetImage('images/MM.jpg'),
-                  )
-                ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Image(image: AssetImage('images/MM.jpg')),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                            Text("Miwa Kasumi", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
+                            Text("      "),
+                            Text("The greatest Jujutsu Sorcerer of all time.") //Description of food truck
+        ]
+    )
+]
+          )
+        )
+      ),
+
+            ElevatedButton(
+              onPressed: (){
+                routeCoordinates.clear();
+                fetchRoute(startLocation: userLocation, endLocation: trucks[3].point);
+              },
+              style: ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.grey),
+                  minimumSize: MaterialStateProperty.all(Size(130, 40)),
+                  elevation: MaterialStateProperty.all(0),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),)),
+                  ),
+              child: 
+                Container(
+                  width: 5000,
+                  height: 100,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Image(image: AssetImage('images/MM.jpg')),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                            Text("Miwa Kasumi", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
+                            Text("      "),
+                            Text("The greatest Jujutsu Sorcerer of all time.") //Description of food truck
+        ]
+    )
+]
+          )
+        )
+      ),
+
+
               ],
             ),
           )

@@ -4,9 +4,6 @@ import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:dio/dio.dart';
-
-
 
 void main() {
   runApp(const MyApp());
@@ -20,9 +17,9 @@ class MyApp extends StatelessWidget {
         height: 30.0,
         point: LatLng(40.444990, -79.940640),
         child: Icon(
-          Icons.local_shipping,
+          Icons.location_on_rounded,
           color: Colors.red,
-          size: 30.0,
+          size: 50.0,
         )
       ),
       Marker(
@@ -30,9 +27,9 @@ class MyApp extends StatelessWidget {
         height: 30.0,
         point: LatLng(40.444490, -79.943640),
         child: Icon(
-          Icons.local_shipping,
+          Icons.location_on_rounded,
           color: Colors.blue,
-          size: 30.0,
+          size: 50.0,
         )
       ),
       Marker(
@@ -40,9 +37,9 @@ class MyApp extends StatelessWidget {
         height: 30.0,
         point: LatLng(40.444019, -79.954590),
         child: Icon(
-          Icons.local_shipping,
+          Icons.location_on_rounded,
           color: Colors.purple,
-          size: 30.0,
+          size: 50.0,
         )
       ),
       Marker(
@@ -50,9 +47,9 @@ class MyApp extends StatelessWidget {
         height: 30.0,
         point: LatLng(40.445490, -79.942640),
         child: Icon(
-          Icons.local_shipping,
-          color: Colors.orange,
-          size: 30.0,
+          Icons.location_on_rounded,
+          color: Colors.green,
+          size: 50.0,
         )
       ),
     ];
@@ -89,7 +86,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    fetchRoute();
   }
   
   // I don't what are those for
@@ -101,13 +97,13 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flutter Web Map'),
-        backgroundColor: Color.fromARGB(255, 55, 136, 105), // Optional background color,
+        title: const Text('Flutter Web Map'),
+        backgroundColor: const Color.fromARGB(255, 55, 136, 105), // Optional background color,
       ),
       body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('images/background.jpg'),
+              image: const AssetImage('images/background.jpg'),
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
                 Colors.black.withOpacity(0.75), // Adjust opacity as needed
@@ -116,22 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
             )
           ),
           child: Center(
-          // Center is a layout widget. It takes a single child and positions it
-          // in the middle of the parent.
           child: Column(
-            // Column is also a layout widget. It takes a list of children and
-            // arranges them vertically. By default, it sizes itself to fit its
-            // children horizontally, and tries to be as tall as its parent.
-            //
-            // Column has various properties to control how it sizes itself and
-            // how it positions its children. Here we use mainAxisAlignment to
-            // center the children vertically; the main axis here is the vertical
-            // axis because Columns are vertical (the cross axis would be
-            // horizontal).
-            //
-            // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-            // action in the IDE, or press "p" in the console), to see the
-            // wireframe for each widget.
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               ElevatedButton(
@@ -144,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
               ),
 
-              Text("    "),
+              const Text("    "),
 
               ElevatedButton(
                 child: const Text('User!'),
@@ -166,7 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class Truckview extends StatefulWidget {
-  Truckview({super.key, required this.title, this.trucks});
+  const Truckview({super.key, required this.title, this.trucks});
   final String title;
   final trucks;
 
@@ -183,7 +164,7 @@ class _Truckview extends State<Truckview> {
   @override
   Widget build(BuildContext context) {
 
-    Future<Position> _getCurrentLocation() async {
+    Future<Position> getCurrentLocation() async {
 
       permission = await Geolocator.checkPermission();
 
@@ -205,13 +186,13 @@ class _Truckview extends State<Truckview> {
           child: ElevatedButton(
             child: const Text("Broadcast my Location"),
             onPressed: () {
-              _getCurrentLocation().then((position) {
+              getCurrentLocation().then((position) {
                 trucks.add(
                   Marker(
                     point: LatLng(position.latitude, position.longitude), 
                     width: 30.0,
                     height: 30.0,
-                    child: Icon(
+                    child: const Icon(
                       Icons.local_shipping, color: Color.fromARGB(255, 136, 89, 1)
                     )
                   )
@@ -230,7 +211,7 @@ class _Truckview extends State<Truckview> {
 }
 
 class Mapview extends StatefulWidget {
-  Mapview({super.key, required this.title, this.trucks});
+  const Mapview({super.key, required this.title, this.trucks});
 
   final String title;
   final trucks;
@@ -240,7 +221,7 @@ class Mapview extends StatefulWidget {
 }
 
 class _Mapview extends State<Mapview> {
-  LatLng userLocation = LatLng(40.443490, -79.941640);
+  LatLng userLocation = const LatLng(40.443490, -79.941640);
   _Mapview({this.trucks});
 
   List<LatLng> routeCoordinates = [];
@@ -294,7 +275,7 @@ class _Mapview extends State<Mapview> {
           //Items in the column
         children: [
           //First item in the column, the flutter map
-          Container(
+          SizedBox(
             width:5000,
             height: 496,
             child: FlutterMap(
@@ -318,23 +299,14 @@ class _Mapview extends State<Mapview> {
                 ),
                 MarkerLayer(
                   markers: [
-                  Marker(point: userLocation, width: 30.0, height: 30.0, child: Icon(Icons.person)), ... trucks]
-                ),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: ElevatedButton(
-                    child: const Text('Home'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    }
-                  ),
+                  Marker(point: userLocation, width: 30.0, height: 30.0, child: const Icon(Icons.person)), ... trucks]
                 ),
                 PolylineLayer(
                     polylines: [
                       Polyline(
                         points: routeCoordinates,
                         color: Colors.blue,
-                        strokeWidth: 3.0,
+                        strokeWidth: 8.0,
                       )
                     ],
                 ),
@@ -345,10 +317,10 @@ class _Mapview extends State<Mapview> {
 
       //The "Menu" for all the food trucks with their pictures and title and descriptions.
       //Edit the containers to will
-          Container(
+          SizedBox(
             //Dimensions for the ListView
             width: double.infinity,
-            height: 250,
+            height: 400,
 
             child: ListView(
               //Items in the ListView
@@ -360,8 +332,8 @@ class _Mapview extends State<Mapview> {
                 fetchRoute(startLocation: userLocation, endLocation: trucks[0].point);
               },
               style: ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll<Color>(Color.fromARGB(255, 215, 126, 23)),
-                  minimumSize: MaterialStateProperty.all(Size(130, 40)),
+                  backgroundColor: const MaterialStatePropertyAll<Color>(Colors.red),
+                  minimumSize: MaterialStateProperty.all(const Size(130, 40)),
                   elevation: MaterialStateProperty.all(0),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
@@ -369,7 +341,7 @@ class _Mapview extends State<Mapview> {
                   ),
               child: 
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
                   width: 5000,
                   height: 100,
                   child: Row(
@@ -380,10 +352,10 @@ class _Mapview extends State<Mapview> {
                         Image.network(
                           'images/burger.jpg')
                       ),
-                      Row(
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                            Text("Bob's Burgers!", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
+                            Text("Bob's Burgers!", style: TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
                             Text("      "),
                             Text("Delicious and Quick! Come try us out today!") //Description of food truck
         ]
@@ -399,8 +371,8 @@ class _Mapview extends State<Mapview> {
                 fetchRoute(startLocation: userLocation, endLocation: trucks[1].point);
               },
               style: ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll<Color>(Color.fromARGB(255, 193, 152, 62)),
-                  minimumSize: MaterialStateProperty.all(Size(130, 40)),
+                  backgroundColor: const MaterialStatePropertyAll<Color>(Colors.blue),
+                  minimumSize: MaterialStateProperty.all(const Size(130, 40)),
                   elevation: MaterialStateProperty.all(0),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
@@ -408,7 +380,7 @@ class _Mapview extends State<Mapview> {
                   ),
               child: 
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
                   width: 5000,
                   height: 100,
                   child: Row(
@@ -417,10 +389,10 @@ class _Mapview extends State<Mapview> {
                       borderRadius: BorderRadius.circular(50),
                       child: 
                         Image.network('images/corndog.jpg')),
-                      Row(
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                            Text("Cassie's Corn Dogs", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
+                            Text("Cassie's Corn Dogs", style: TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
                             Text("      "),
                             Text("Pittsburgh's Authentic Korean Corn Dogs!") //Description of food truck
         ]
@@ -436,8 +408,8 @@ class _Mapview extends State<Mapview> {
                 fetchRoute(startLocation: userLocation, endLocation: trucks[2].point);
               },
               style: ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll<Color>(Color.fromARGB(255, 179, 176, 176)),
-                  minimumSize: MaterialStateProperty.all(Size(130, 40)),
+                  backgroundColor: const MaterialStatePropertyAll<Color>(Colors.purple),
+                  minimumSize: MaterialStateProperty.all(const Size(130, 40)),
                   elevation: MaterialStateProperty.all(0),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
@@ -445,7 +417,7 @@ class _Mapview extends State<Mapview> {
                   ),
               child: 
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
                   width: 5000,
                   height: 100,
                   child: Row(
@@ -454,10 +426,10 @@ class _Mapview extends State<Mapview> {
                       borderRadius: BorderRadius.circular(50),
                       child: 
                         Image.network('images/icecream.jpg')),
-                      Row(
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                            Text("Issac's Ice Cream", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
+                            Text("Issac's Ice Cream", style: TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
                             Text("      "),
                             Text("All the ice creams, all the flavors, we've got it!") //Description of food truck
         ]
@@ -473,8 +445,8 @@ class _Mapview extends State<Mapview> {
                 fetchRoute(startLocation: userLocation, endLocation: trucks[3].point);
               },
               style: ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll<Color>(Color.fromARGB(255, 192, 225, 84)),
-                  minimumSize: MaterialStateProperty.all(Size(130, 40)),
+                  backgroundColor: const MaterialStatePropertyAll<Color>(Colors.green),
+                  minimumSize: MaterialStateProperty.all(const Size(130, 40)),
                   elevation: MaterialStateProperty.all(0),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
@@ -482,7 +454,7 @@ class _Mapview extends State<Mapview> {
                   ),
               child: 
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
                   width: 1000,
                   height: 100,
                   child: Row(
@@ -491,10 +463,10 @@ class _Mapview extends State<Mapview> {
                       borderRadius: BorderRadius.circular(50),
                       child: 
                         Image.network('images/taco.jpg')),
-                      Row(
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                            Text("Tony's Tacos      ", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
+                            Text("Tony's Tacos      ", style: TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
                             Text("Serving Tacos since 1988                                    ") //Description of food truck
         ]
     )

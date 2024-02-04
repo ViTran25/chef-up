@@ -4,6 +4,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:dio/dio.dart';
 
 void main() {
   runApp(const MyApp());
@@ -80,9 +81,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  _MyHomePageState({this.trucks});
-  final trucks;
-
   @override
   void initState() {
     super.initState();
@@ -103,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: const AssetImage('images/background.jpg'),
+              image: AssetImage('images/background.jpg'),
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
                 Colors.black.withOpacity(0.75), // Adjust opacity as needed
@@ -112,7 +110,22 @@ class _MyHomePageState extends State<MyHomePage> {
             )
           ),
           child: Center(
+          // Center is a layout widget. It takes a single child and positions it
+          // in the middle of the parent.
           child: Column(
+            // Column is also a layout widget. It takes a list of children and
+            // arranges them vertically. By default, it sizes itself to fit its
+            // children horizontally, and tries to be as tall as its parent.
+            //
+            // Column has various properties to control how it sizes itself and
+            // how it positions its children. Here we use mainAxisAlignment to
+            // center the children vertically; the main axis here is the vertical
+            // axis because Columns are vertical (the cross axis would be
+            // horizontal).
+            //
+            // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
+            // action in the IDE, or press "p" in the console), to see the
+            // wireframe for each widget.
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               ElevatedButton(
@@ -120,12 +133,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Truckview(title: "truck", trucks: trucks)),
+                    MaterialPageRoute(builder: (context) => const Truckview(title: "truck")),
                   );
                 }
               ),
 
-              const Text("    "),
+              Text("    "),
 
               ElevatedButton(
                 child: const Text('User!'),
@@ -133,7 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   // Navigate to second route when tapped.
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Mapview(title: "map", trucks: trucks)),
+                    MaterialPageRoute(builder: (context) => const Mapview(title: "map")),
                   );
                 },
               ),
@@ -221,9 +234,14 @@ class Mapview extends StatefulWidget {
 }
 
 class _Mapview extends State<Mapview> {
-  LatLng userLocation = const LatLng(40.443490, -79.941640);
-  _Mapview({this.trucks});
+  LatLng userLocation = LatLng(40.443490, -79.941640);
+  LatLng truck1Location = LatLng(40.444990, -79.940640);
+  LatLng truck2Location = LatLng(40.444490, -79.943640);
+  LatLng truck3Location = LatLng(40.444019, -79.954590);
+  LatLng truck4Location = LatLng(40.445490, -79.942640);
 
+  // Routing function
+  final List<Marker> markers = [];
   List<LatLng> routeCoordinates = [];
  
   // This is the method for getting a route
@@ -251,22 +269,52 @@ class _Mapview extends State<Mapview> {
         final double lng = coordinate[0];
         routeCoordinates.add(LatLng(lat, lng));
       }
+
+      setState(() {
+        markers.addAll([
+          Marker(
+            width: 30.0,
+            height: 30.0,
+            point: startPoint,
+            child: Container(
+              child: Icon(
+                Icons.location_on,
+                color: Color.fromARGB(255, 160, 15, 244),
+                size: 30.0,
+              ),
+            ),
+          ),
+          Marker(
+            width: 30.0,
+            height: 30.0,
+            point: endPoint,
+            child: Container(
+              child: Icon(
+                Icons.location_on,
+                color: Colors.blue,
+                size: 30.0,
+              ),
+            ),
+          ),
+        ]);
+      });
     } else {
       throw Exception('Failed to fetch route');
     }
   }
 
-
   @override
   void initState() {
     super.initState();
   }
-  final trucks;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
     //Add Header if needed
-  
+      appBar: AppBar(
+        title: Text('Flutter Web Map'),
+        backgroundColor: Color.fromARGB(255, 55, 136, 105), // Optional background color,
+      ),
       //Main Body for the Web, note that it is written as a column
       body: Column(
         //Direction of the column orientation
@@ -277,7 +325,7 @@ class _Mapview extends State<Mapview> {
           //First item in the column, the flutter map
           SizedBox(
             width:5000,
-            height: 496,
+            height: 430,
             child: FlutterMap(
               
               options: const MapOptions(
@@ -310,6 +358,69 @@ class _Mapview extends State<Mapview> {
                       )
                     ],
                 ),
+                MarkerLayer(
+                  markers: [
+                    Marker(
+                      width: 30.0,
+                      height: 30.0,
+                      point: userLocation,
+                      child: Icon(
+                        Icons.person,
+                        color: Colors.pink,
+                        size: 30.0,
+                      )
+                    ),
+                    Marker(
+                      width: 30.0,
+                      height: 30.0,
+                      point: truck1Location,
+                      child: Icon(
+                        Icons.local_shipping,
+                        color: Colors.red,
+                        size: 30.0,
+                      )
+                    ),
+                    Marker(
+                      width: 30.0,
+                      height: 30.0,
+                      point: truck2Location,
+                      child: Icon(
+                        Icons.local_shipping,
+                        color: Colors.blue,
+                        size: 30.0,
+                      )
+                    ),
+                    Marker(
+                      width: 30.0,
+                      height: 30.0,
+                      point: truck3Location,
+                      child: Icon(
+                        Icons.local_shipping,
+                        color: Colors.purple,
+                        size: 30.0,
+                      )
+                    ),
+                    Marker(
+                      width: 30.0,
+                      height: 30.0,
+                      point: truck4Location,
+                      child: Icon(
+                        Icons.local_shipping,
+                        color: Colors.orange,
+                        size: 30.0,
+                      )
+                    ),
+                  ]
+                ),
+                PolylineLayer(
+                    polylines: [
+                      Polyline(
+                        points: routeCoordinates,
+                        color: Colors.blue,
+                        strokeWidth: 3.0,
+                      )
+                    ],
+                ),
               ],
             )
           ),
@@ -320,7 +431,7 @@ class _Mapview extends State<Mapview> {
           SizedBox(
             //Dimensions for the ListView
             width: double.infinity,
-            height: 400,
+            height: 170,
 
             child: ListView(
               //Items in the ListView
@@ -329,11 +440,11 @@ class _Mapview extends State<Mapview> {
             ElevatedButton(
               onPressed: (){
                 routeCoordinates.clear();
-                fetchRoute(startLocation: userLocation, endLocation: trucks[0].point);
+                fetchRoute(startLocation: userLocation, endLocation: truck1Location);
               },
               style: ButtonStyle(
-                  backgroundColor: const MaterialStatePropertyAll<Color>(Colors.red),
-                  minimumSize: MaterialStateProperty.all(const Size(130, 40)),
+                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
+                  minimumSize: MaterialStateProperty.all(Size(130, 40)),
                   elevation: MaterialStateProperty.all(0),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
@@ -346,18 +457,14 @@ class _Mapview extends State<Mapview> {
                   height: 100,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: 
-                        Image.network(
-                          'images/burger.jpg')
-                      ),
-                      const Row(
+                    children: [
+                      Image(image: AssetImage('images/MM.jpg')),
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                            Text("Bob's Burgers!", style: TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
+                            Text("Miwa Kasumi", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
                             Text("      "),
-                            Text("Delicious and Quick! Come try us out today!") //Description of food truck
+                            Text("The greatest Jujutsu Sorcerer of all time.") //Description of food truck
         ]
     )
 ]
@@ -368,11 +475,11 @@ class _Mapview extends State<Mapview> {
             ElevatedButton(
               onPressed: (){
                 routeCoordinates.clear();
-                fetchRoute(startLocation: userLocation, endLocation: trucks[1].point);
+                fetchRoute(startLocation: userLocation, endLocation: truck2Location);
               },
               style: ButtonStyle(
-                  backgroundColor: const MaterialStatePropertyAll<Color>(Colors.blue),
-                  minimumSize: MaterialStateProperty.all(const Size(130, 40)),
+                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.blue),
+                  minimumSize: MaterialStateProperty.all(Size(130, 40)),
                   elevation: MaterialStateProperty.all(0),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
@@ -385,16 +492,14 @@ class _Mapview extends State<Mapview> {
                   height: 100,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [ClipRRect(
-                      borderRadius: BorderRadius.circular(50),
-                      child: 
-                        Image.network('images/corndog.jpg')),
-                      const Row(
+                    children: [
+                      Image(image: AssetImage('images/MM.jpg')),
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                            Text("Cassie's Corn Dogs", style: TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
+                            Text("Miwa Kasumi", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
                             Text("      "),
-                            Text("Pittsburgh's Authentic Korean Corn Dogs!") //Description of food truck
+                            Text("The greatest Jujutsu Sorcerer of all time.") //Description of food truck
         ]
     )
 ]
@@ -405,11 +510,11 @@ class _Mapview extends State<Mapview> {
             ElevatedButton(
               onPressed: (){
                 routeCoordinates.clear();
-                fetchRoute(startLocation: userLocation, endLocation: trucks[2].point);
+                fetchRoute(startLocation: userLocation, endLocation: truck3Location);
               },
               style: ButtonStyle(
-                  backgroundColor: const MaterialStatePropertyAll<Color>(Colors.purple),
-                  minimumSize: MaterialStateProperty.all(const Size(130, 40)),
+                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.green),
+                  minimumSize: MaterialStateProperty.all(Size(130, 40)),
                   elevation: MaterialStateProperty.all(0),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
@@ -422,16 +527,14 @@ class _Mapview extends State<Mapview> {
                   height: 100,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [ClipRRect(
-                      borderRadius: BorderRadius.circular(50),
-                      child: 
-                        Image.network('images/icecream.jpg')),
-                      const Row(
+                    children: [
+                      Image(image: AssetImage('images/MM.jpg')),
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                            Text("Issac's Ice Cream", style: TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
+                            Text("Miwa Kasumi", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
                             Text("      "),
-                            Text("All the ice creams, all the flavors, we've got it!") //Description of food truck
+                            Text("The greatest Jujutsu Sorcerer of all time.") //Description of food truck
         ]
     )
 ]
@@ -442,11 +545,11 @@ class _Mapview extends State<Mapview> {
             ElevatedButton(
               onPressed: (){
                 routeCoordinates.clear();
-                fetchRoute(startLocation: userLocation, endLocation: trucks[3].point);
+                fetchRoute(startLocation: userLocation, endLocation: truck4Location);
               },
               style: ButtonStyle(
-                  backgroundColor: const MaterialStatePropertyAll<Color>(Colors.green),
-                  minimumSize: MaterialStateProperty.all(const Size(130, 40)),
+                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.grey),
+                  minimumSize: MaterialStateProperty.all(Size(130, 40)),
                   elevation: MaterialStateProperty.all(0),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
@@ -454,20 +557,18 @@ class _Mapview extends State<Mapview> {
                   ),
               child: 
                 Container(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  width: 1000,
+                  width: 5000,
                   height: 100,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [ClipRRect(
-                      borderRadius: BorderRadius.circular(50),
-                      child: 
-                        Image.network('images/taco.jpg')),
-                      const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Image(image: AssetImage('images/MM.jpg')),
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                            Text("Tony's Tacos      ", style: TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
-                            Text("Serving Tacos since 1988                                    ") //Description of food truck
+                            Text("Miwa Kasumi", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
+                            Text("      "),
+                            Text("The greatest Jujutsu Sorcerer of all time.") //Description of food truck
         ]
     )
 ]

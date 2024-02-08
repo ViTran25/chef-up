@@ -15,6 +15,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // Enable debug painting features
+      debugShowCheckedModeBanner: false,
+      debugShowMaterialGrid: false,
       title: 'ChefUp',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -540,24 +543,45 @@ class _Mapview extends State<Mapview> {
                       minimumSize: const Size(130, 40), 
                       backgroundColor: Colors.transparent,
                     ),
-                    child: 
-                      const SizedBox(
-                        width: 5000,
-                        height: 100,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Image(image: AssetImage('images/MM.jpg')),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            height: 100,
+                            child: Image(
+                              image: AssetImage('images/MM.jpg'), 
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            height: 100,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                  Text("Miwa Kasumi", style: TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
-                                  Text("The greatest Jujutsu Sorcerer of all time.") //Description of food truck
-                                ]
-                            )
-                          ]
+                                  Text("Miwa Kasumi", style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                    ),
+                                  ), //Name of Food truck
+                                  Text("The greatest Jujutsu Sorcerer of all time.", style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                    ),
+                                  ) //Description of food truck
+                              ]
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: Text("Menu", style: TextStyle(fontWeight: FontWeight.bold)),
+                          )
                         )
-                      )
+                      ]
+                    )
                   ),
                 ),
 
@@ -584,24 +608,45 @@ class _Mapview extends State<Mapview> {
                       minimumSize: const Size(130, 40), 
                       backgroundColor: Colors.transparent,
                     ),
-                    child: 
-                      const SizedBox(
-                        width: 5000,
-                        height: 100,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Image(image: AssetImage('images/MM.jpg')),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            height: 100,
+                            child: Image(
+                              image: AssetImage('images/MM.jpg'), 
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            height: 100,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                  Text("Miwa Kasumi", style: TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
-                                  Text("The greatest Jujutsu Sorcerer of all time.") //Description of food truck
+                                  Text("Miwa Kasumi", style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                    ),
+                                  ), //Name of Food truck
+                                  Text("The greatest Jujutsu Sorcerer of all time.", style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                    ),
+                                  ) //Description of food truck
                               ]
-                            )
-                          ]
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: Text("Menu", style: TextStyle(fontWeight: FontWeight.bold)),
+                          )
                         )
-                      )
+                      ]
+                    )
                   ),
                 ),
 
@@ -628,24 +673,45 @@ class _Mapview extends State<Mapview> {
                       minimumSize: const Size(130, 40), 
                       backgroundColor: Colors.transparent,
                     ),
-                    child: 
-                      const SizedBox(
-                        width: 5000,
-                        height: 100,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Image(image: AssetImage('images/MM.jpg')),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            height: 100,
+                            child: Image(
+                              image: AssetImage('images/MM.jpg'), 
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            height: 100,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                  Text("Miwa Kasumi", style: TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
-                                  Text("The greatest Jujutsu Sorcerer of all time.") //Description of food truck
+                                  Text("Miwa Kasumi", style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                    ),
+                                  ), //Name of Food truck
+                                  Text("The greatest Jujutsu Sorcerer of all time.", style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                    ),
+                                  ) //Description of food truck
                               ]
-                            )
-                          ]
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: Text("Menu", style: TextStyle(fontWeight: FontWeight.bold)),
+                          )
                         )
-                      )
+                      ]
+                    )
                   ),
                 ),
 
@@ -672,24 +738,45 @@ class _Mapview extends State<Mapview> {
                       minimumSize: const Size(130, 40), 
                       backgroundColor: Colors.transparent,
                     ),
-                    child: 
-                      const SizedBox(
-                        width: 5000,
-                        height: 100,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Image(image: AssetImage('images/MM.jpg')),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            height: 100,
+                            child: Image(
+                              image: AssetImage('images/MM.jpg'), 
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            height: 100,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                  Text("Miwa Kasumi", style: TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
-                                  Text("The greatest Jujutsu Sorcerer of all time.") //Description of food truck
+                                  Text("Miwa Kasumi", style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                    ),
+                                  ), //Name of Food truck
+                                  Text("The greatest Jujutsu Sorcerer of all time.", style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                    ),
+                                  ) //Description of food truck
                               ]
-                            )
-                          ]
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: Text("Menu", style: TextStyle(fontWeight: FontWeight.bold)),
+                          )
                         )
-                      )
+                      ]
+                    )
                   ),
                 ),
 
@@ -716,29 +803,45 @@ class _Mapview extends State<Mapview> {
                       minimumSize: const Size(130, 40), 
                       backgroundColor: Colors.transparent,
                     ),
-                    child: 
-                      const SizedBox(
-                        width: 5000,
-                        height: 100,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Flexible(flex: 1, child: Image(image: AssetImage('images/MM.jpg')),),
-                            Expanded(
-                              flex: 1,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                    Text("Miwa Kasumi", style: TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
-                                    Text("The greatest Jujutsu Sorcerer of all time.") //Description of food truck
-                                ]
-                              ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            height: 100,
+                            child: Image(
+                              image: AssetImage('images/MM.jpg'), 
                             ),
-                            Flexible(flex: 1, child: Text("Menu", style: TextStyle(fontWeight: FontWeight.bold),))
-                          ]
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            height: 100,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                  Text("Miwa Kasumi", style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                    ),
+                                  ), //Name of Food truck
+                                  Text("The greatest Jujutsu Sorcerer of all time.", style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                    ),
+                                  ) //Description of food truck
+                              ]
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: Text("Menu", style: TextStyle(fontWeight: FontWeight.bold)),
+                          )
                         )
-                      )
+                      ]
+                    )
                   ),
                 ),
               ],

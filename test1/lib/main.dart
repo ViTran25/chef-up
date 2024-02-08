@@ -343,10 +343,26 @@ class _Mapview extends State<Mapview> {
                             transform: Matrix4.identity(),
                             child: Transform.scale(
                               scale: _markerHoverStates[truck1Location] ?? false ? 1.5 : 1.0,
-                              child: const Icon(
-                                Icons.location_on_rounded,
-                                color: Colors.red,
-                                size: 50.0,
+                              child: Stack(
+                                children: [
+                                  Icon(
+                                    Icons.location_on_rounded,
+                                    color: Colors.red,
+                                    size: 50.0,
+                                  ),
+                                  Positioned(
+                                    bottom: 0,
+                                    child: Expanded(
+                                      child: Text("Bob's Burger",
+                                        style: TextStyle(
+                                          color: Colors.black, 
+                                          fontSize: 8.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    )
+                                  )
+                                ]
                               ),
                             )
                           )
@@ -379,10 +395,26 @@ class _Mapview extends State<Mapview> {
                             transform: Matrix4.identity(),
                             child: Transform.scale(
                               scale: _markerHoverStates[truck2Location] ?? false ? 1.5 : 1.0,
-                              child: const Icon(
-                                Icons.location_on_rounded,
-                                color: Colors.blue,
-                                size: 50.0,
+                              child: Stack(
+                                children: [
+                                  Icon(
+                                    Icons.location_on_rounded,
+                                    color: Colors.blue,
+                                    size: 50.0,
+                                  ),
+                                  Positioned(
+                                    bottom: 0,
+                                    child: Expanded(
+                                      child: Text("Tony's Taco",
+                                        style: TextStyle(
+                                          color: Colors.black, 
+                                          fontSize: 8.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    )
+                                  )
+                                ]
                               ),
                             )
                           )
@@ -415,10 +447,26 @@ class _Mapview extends State<Mapview> {
                             transform: Matrix4.identity(),
                             child: Transform.scale(
                               scale: _markerHoverStates[truck3Location] ?? false ? 1.5 : 1.0,
-                              child: const Icon(
-                                Icons.location_on_rounded,
-                                color: Colors.purple,
-                                size: 50.0,
+                              child: Stack(
+                                children: [
+                                  Icon(
+                                    Icons.location_on_rounded,
+                                    color: Colors.purple,
+                                    size: 50.0,
+                                  ),
+                                  Positioned(
+                                    bottom: 0,
+                                    child: Expanded(
+                                      child: Text("Cassie's Corn Dogs",
+                                        style: TextStyle(
+                                          color: Colors.black, 
+                                          fontSize: 8.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    )
+                                  )
+                                ]
                               ),
                             )
                           )
@@ -451,10 +499,26 @@ class _Mapview extends State<Mapview> {
                             transform: Matrix4.identity(),
                             child: Transform.scale(
                               scale: _markerHoverStates[truck4Location] ?? false ? 1.5 : 1.0,
-                              child: const Icon(
-                                Icons.location_on_rounded,
-                                color: Colors.orange,
-                                size: 50.0,
+                              child: Stack(
+                                children: [
+                                  Icon(
+                                    Icons.location_on_rounded,
+                                    color: Colors.orange,
+                                    size: 50.0,
+                                  ),
+                                  Positioned(
+                                    bottom: 0,
+                                    child: Expanded(
+                                      child: Text("Issac's Ice Cream",
+                                        style: TextStyle(
+                                          color: Colors.black, 
+                                          fontSize: 8.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    )
+                                  )
+                                ]
                               ),
                             )
                           )
@@ -487,10 +551,26 @@ class _Mapview extends State<Mapview> {
                             transform: Matrix4.identity(),
                             child: Transform.scale(
                               scale: _markerHoverStates[truck5Location] ?? false ? 1.5 : 1.0,
-                              child: const Icon(
-                                Icons.location_on_rounded,
-                                color: Colors.yellow,
-                                size: 50.0,
+                              child: Stack(
+                                children: [
+                                  Icon(
+                                    Icons.location_on_rounded,
+                                    color: Colors.yellow,
+                                    size: 50.0,
+                                  ),
+                                  Positioned(
+                                    bottom: 0,
+                                    child: Expanded(
+                                      child: Text("Kieu's Banh Mi",
+                                        style: TextStyle(
+                                          color: Colors.black, 
+                                          fontSize: 8.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    )
+                                  )
+                                ]
                               ),
                             )
                           )

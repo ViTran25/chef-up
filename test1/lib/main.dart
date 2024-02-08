@@ -50,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('images/background.jpg'),
+              image: const AssetImage('images/background.jpg'),
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
                 Colors.black.withOpacity(0.75), // Adjust opacity as needed
@@ -72,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
               ),
 
-              Text("    "),
+              const Text("    "),
 
               ElevatedButton(
                 child: const Text('User!'),
@@ -122,12 +122,16 @@ class Mapview extends StatefulWidget {
 }
 
 class _Mapview extends State<Mapview> {
-  LatLng userLocation = LatLng(40.441783, -79.956263);
-  LatLng truck1Location = LatLng(40.444990, -79.940640);
-  LatLng truck2Location = LatLng(40.444646, -79.954607);
-  LatLng truck3Location = LatLng(40.444019, -79.954590);
-  LatLng truck4Location = LatLng(40.445490, -79.942640);
-  LatLng truck5Location = LatLng(40.445288, -79.953717);
+  // User location and truck's locations
+  LatLng userLocation = const LatLng(40.441783, -79.956263);
+  LatLng truck1Location = const LatLng(40.444990, -79.940640);
+  LatLng truck2Location = const LatLng(40.444646, -79.954607);
+  LatLng truck3Location = const LatLng(40.444019, -79.954590);
+  LatLng truck4Location = const LatLng(40.445490, -79.942640);
+  LatLng truck5Location = const LatLng(40.445288, -79.953717);
+
+  // Map to store hover state for each marker
+  final Map<LatLng, bool> _markerHoverStates = {};
 
   // Routing function
   final List<Marker> markers = [];
@@ -166,7 +170,7 @@ class _Mapview extends State<Mapview> {
             height: 30.0,
             point: startPoint,
             child: Container(
-              child: Icon(
+              child: const Icon(
                 Icons.person_2_rounded,
                 color: Colors.lightBlueAccent,
                 size: 30.0,
@@ -178,7 +182,7 @@ class _Mapview extends State<Mapview> {
             height: 30.0,
             point: endPoint,
             child: Container(
-              child: Icon(
+              child: const Icon(
                 Icons.location_on,
                 color: Colors.blue,
                 size: 30.0,
@@ -195,6 +199,35 @@ class _Mapview extends State<Mapview> {
   @override
   void initState() {
     super.initState();
+    _getCurrentLocation();
+  }
+
+  // Method for to handle marker tap events
+  void _onMarkerTapped(LatLng tappedMarker) {
+    // Check if tapped marker is not the user marker
+    if (tappedMarker != userLocation) {
+      routeCoordinates.clear();
+      fetchRoute(startLocation: userLocation, endLocation: tappedMarker);
+    }
+  }
+
+  late Position _currentPosition;
+  // Method for getting the current location of user
+  void _getCurrentLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.best,
+    );
+
+    setState(() {
+      _currentPosition = position;
+    },);
+
+    userLocation = positionToLatLng(_currentPosition);
+  }
+
+  // Method for converting from Position to LatLng
+  LatLng positionToLatLng(Position position) {
+    return LatLng(position.latitude, position.longitude);
   }
 
   @override
@@ -209,10 +242,10 @@ class _Mapview extends State<Mapview> {
               height: 4.0,
           )
         ),
-        title: Text('Food Truck Map'),
+        title: const Text('Food Truck Map'),
         backgroundColor: Colors.transparent,
         flexibleSpace: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [Colors.green, Colors.greenAccent],
               begin: Alignment.topCenter,
@@ -234,7 +267,7 @@ class _Mapview extends State<Mapview> {
             child: FlutterMap(
               
               options: MapOptions(
-                initialCenter: LatLng(40.443490, -79.941640),
+                initialCenter: LatLng(_currentPosition.latitude, _currentPosition.longitude),
                 initialZoom: 17.2,
               ),
               children: [
@@ -265,9 +298,9 @@ class _Mapview extends State<Mapview> {
                       width: 30.0,
                       height: 30.0,
                       point: userLocation,
-                      child: Icon(
+                      child: const Icon(
                         Icons.circle,
-                        color: const Color.fromARGB(255, 56, 58, 59),
+                        color: Color.fromARGB(255, 56, 58, 59),
                         size: 26.0,
                       )
                     ),
@@ -275,60 +308,190 @@ class _Mapview extends State<Mapview> {
                       width: 30.0,
                       height: 30.0,
                       point: userLocation,
-                      child: Icon(
+                      child: const Icon(
                         Icons.circle,
                         color: Colors.blue,
                         size: 20.0,
-                      )
+                      ),
                     ),
                     Marker(
-                      width: 30.0,
-                      height: 30.0,
+                      width: 50.0,
+                      height: 50.0,
                       point: truck1Location,
-                      child: Icon(
-                        Icons.location_on_rounded,
-                        color: Colors.red,
-                        size: 50.0,
+                      child: GestureDetector(
+                        onTap: () {
+                          _onMarkerTapped(truck1Location);
+                        },
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          onEnter: (_) {
+                            setState(() {
+                              _markerHoverStates[truck1Location] = true;
+                            });
+                          },
+                          onExit: (_) {
+                            setState(() {
+                              _markerHoverStates[truck1Location] = false;
+                            });
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            curve: Curves.easeInOut,
+                            transform: Matrix4.identity(),
+                            child: Transform.scale(
+                              scale: _markerHoverStates[truck1Location] ?? false ? 1.5 : 1.0,
+                              child: const Icon(
+                                Icons.location_on_rounded,
+                                color: Colors.red,
+                                size: 50.0,
+                              ),
+                            )
+                          )
+                        )
                       )
                     ),
                     Marker(
-                      width: 30.0,
-                      height: 30.0,
+                      width: 50.0,
+                      height: 50.0,
                       point: truck2Location,
-                      child: Icon(
-                        Icons.location_on_rounded,
-                        color: Colors.blue,
-                        size: 50.0,
+                      child: GestureDetector(
+                        onTap: () {
+                          _onMarkerTapped(truck2Location);
+                        },
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          onEnter: (_) {
+                            setState(() {
+                              _markerHoverStates[truck2Location] = true;
+                            });
+                          },
+                          onExit: (_) {
+                            setState(() {
+                              _markerHoverStates[truck2Location] = false;
+                            });
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            curve: Curves.easeInOut,
+                            transform: Matrix4.identity(),
+                            child: Transform.scale(
+                              scale: _markerHoverStates[truck2Location] ?? false ? 1.5 : 1.0,
+                              child: const Icon(
+                                Icons.location_on_rounded,
+                                color: Colors.blue,
+                                size: 50.0,
+                              ),
+                            )
+                          )
+                        )
                       )
                     ),
                     Marker(
-                      width: 30.0,
-                      height: 30.0,
+                      width: 50.0,
+                      height: 50.0,
                       point: truck3Location,
-                      child: Icon(
-                        Icons.location_on_rounded,
-                        color: Colors.purple,
-                        size: 50.0,
+                      child: GestureDetector(
+                        onTap: () {
+                          _onMarkerTapped(truck3Location);
+                        },
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          onEnter: (_) {
+                            setState(() {
+                              _markerHoverStates[truck3Location] = true;
+                            });
+                          },
+                          onExit: (_) {
+                            setState(() {
+                              _markerHoverStates[truck3Location] = false;
+                            });
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            curve: Curves.easeInOut,
+                            transform: Matrix4.identity(),
+                            child: Transform.scale(
+                              scale: _markerHoverStates[truck3Location] ?? false ? 1.5 : 1.0,
+                              child: const Icon(
+                                Icons.location_on_rounded,
+                                color: Colors.purple,
+                                size: 50.0,
+                              ),
+                            )
+                          )
+                        )
                       )
                     ),
                     Marker(
-                      width: 30.0,
-                      height: 30.0,
+                      width: 50.0,
+                      height: 50.0,
                       point: truck4Location,
-                      child: Icon(
-                        Icons.location_on_rounded,
-                        color: Colors.orange,
-                        size: 50.0,
+                      child: GestureDetector(
+                        onTap: () {
+                          _onMarkerTapped(truck4Location);
+                        },
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          onEnter: (_) {
+                            setState(() {
+                              _markerHoverStates[truck4Location] = true;
+                            });
+                          },
+                          onExit: (_) {
+                            setState(() {
+                              _markerHoverStates[truck4Location] = false;
+                            });
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            curve: Curves.easeInOut,
+                            transform: Matrix4.identity(),
+                            child: Transform.scale(
+                              scale: _markerHoverStates[truck4Location] ?? false ? 1.5 : 1.0,
+                              child: const Icon(
+                                Icons.location_on_rounded,
+                                color: Colors.orange,
+                                size: 50.0,
+                              ),
+                            )
+                          )
+                        )
                       )
                     ),
                     Marker(
-                      width: 30.0,
-                      height: 30.0,
+                      width: 50.0,
+                      height: 50.0,
                       point: truck5Location,
-                      child: Icon(
-                        Icons.location_on_rounded,
-                        color: Colors.yellow,
-                        size: 50.0,
+                      child: GestureDetector(
+                        onTap: () {
+                          _onMarkerTapped(truck5Location);
+                        },
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          onEnter: (_) {
+                            setState(() {
+                              _markerHoverStates[truck5Location] = true;
+                            });
+                          },
+                          onExit: (_) {
+                            setState(() {
+                              _markerHoverStates[truck5Location] = false;
+                            });
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            curve: Curves.easeInOut,
+                            transform: Matrix4.identity(),
+                            child: Transform.scale(
+                              scale: _markerHoverStates[truck5Location] ?? false ? 1.5 : 1.0,
+                              child: const Icon(
+                                Icons.location_on_rounded,
+                                color: Colors.yellow,
+                                size: 50.0,
+                              ),
+                            )
+                          )
+                        )
                       )
                     ),
                   ]
@@ -355,13 +518,13 @@ class _Mapview extends State<Mapview> {
               //Items in the ListView
               children: [
                 Container(
-                  margin: EdgeInsets.all(3),
+                  margin: const EdgeInsets.all(3),
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: Colors.black,
                       width: 2,
                       ),
-                    gradient: LinearGradient(
+                    gradient: const LinearGradient(
                       colors: [Colors.red, Colors.yellow],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
@@ -374,11 +537,11 @@ class _Mapview extends State<Mapview> {
                       fetchRoute(startLocation: userLocation, endLocation: truck1Location);
                     },
                     style: ElevatedButton.styleFrom(
-                      minimumSize: Size(130, 40), 
+                      minimumSize: const Size(130, 40), 
                       backgroundColor: Colors.transparent,
                     ),
                     child: 
-                      Container(
+                      const SizedBox(
                         width: 5000,
                         height: 100,
                         child: Row(
@@ -388,7 +551,7 @@ class _Mapview extends State<Mapview> {
                             Column(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                  Text("Miwa Kasumi", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
+                                  Text("Miwa Kasumi", style: TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
                                   Text("The greatest Jujutsu Sorcerer of all time.") //Description of food truck
                                 ]
                             )
@@ -399,13 +562,13 @@ class _Mapview extends State<Mapview> {
                 ),
 
                 Container(
-                  margin: EdgeInsets.all(3),
+                  margin: const EdgeInsets.all(3),
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: Colors.black,
                       width: 2,
                       ),
-                    gradient: LinearGradient(
+                    gradient: const LinearGradient(
                       colors: [Colors.blue, Colors.yellow],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
@@ -418,11 +581,11 @@ class _Mapview extends State<Mapview> {
                       fetchRoute(startLocation: userLocation, endLocation: truck2Location);
                     },
                     style: ElevatedButton.styleFrom(
-                      minimumSize: Size(130, 40), 
+                      minimumSize: const Size(130, 40), 
                       backgroundColor: Colors.transparent,
                     ),
                     child: 
-                      Container(
+                      const SizedBox(
                         width: 5000,
                         height: 100,
                         child: Row(
@@ -432,7 +595,7 @@ class _Mapview extends State<Mapview> {
                             Column(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                  Text("Miwa Kasumi", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
+                                  Text("Miwa Kasumi", style: TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
                                   Text("The greatest Jujutsu Sorcerer of all time.") //Description of food truck
                               ]
                             )
@@ -443,13 +606,13 @@ class _Mapview extends State<Mapview> {
                 ),
 
                 Container(
-                  margin: EdgeInsets.all(3),
+                  margin: const EdgeInsets.all(3),
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: Colors.black,
                       width: 2,
                       ),
-                    gradient: LinearGradient(
+                    gradient: const LinearGradient(
                       colors: [Colors.purple, Colors.yellow],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
@@ -462,11 +625,11 @@ class _Mapview extends State<Mapview> {
                       fetchRoute(startLocation: userLocation, endLocation: truck3Location);
                     },
                     style: ElevatedButton.styleFrom(
-                      minimumSize: Size(130, 40), 
+                      minimumSize: const Size(130, 40), 
                       backgroundColor: Colors.transparent,
                     ),
                     child: 
-                      Container(
+                      const SizedBox(
                         width: 5000,
                         height: 100,
                         child: Row(
@@ -476,7 +639,7 @@ class _Mapview extends State<Mapview> {
                             Column(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                  Text("Miwa Kasumi", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
+                                  Text("Miwa Kasumi", style: TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
                                   Text("The greatest Jujutsu Sorcerer of all time.") //Description of food truck
                               ]
                             )
@@ -487,13 +650,13 @@ class _Mapview extends State<Mapview> {
                 ),
 
                 Container(
-                  margin: EdgeInsets.all(3),
+                  margin: const EdgeInsets.all(3),
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: Colors.black,
                       width: 2,
                       ),
-                    gradient: LinearGradient(
+                    gradient: const LinearGradient(
                       colors: [Colors.orange, Colors.yellow],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
@@ -506,11 +669,11 @@ class _Mapview extends State<Mapview> {
                       fetchRoute(startLocation: userLocation, endLocation: truck4Location);
                     },
                     style: ElevatedButton.styleFrom(
-                      minimumSize: Size(130, 40), 
+                      minimumSize: const Size(130, 40), 
                       backgroundColor: Colors.transparent,
                     ),
                     child: 
-                      Container(
+                      const SizedBox(
                         width: 5000,
                         height: 100,
                         child: Row(
@@ -520,7 +683,7 @@ class _Mapview extends State<Mapview> {
                             Column(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                  Text("Miwa Kasumi", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
+                                  Text("Miwa Kasumi", style: TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
                                   Text("The greatest Jujutsu Sorcerer of all time.") //Description of food truck
                               ]
                             )
@@ -531,14 +694,14 @@ class _Mapview extends State<Mapview> {
                 ),
 
                 Container(
-                  margin: EdgeInsets.all(3),
+                  margin: const EdgeInsets.all(3),
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: Colors.black,
                       width: 2,
                       ),
-                    gradient: LinearGradient(
-                      colors: [const Color.fromARGB(255, 216, 194, 0), Colors.yellow],
+                    gradient: const LinearGradient(
+                      colors: [Color.fromARGB(255, 216, 194, 0), Colors.yellow],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
@@ -550,24 +713,29 @@ class _Mapview extends State<Mapview> {
                       fetchRoute(startLocation: userLocation, endLocation: truck5Location);
                     },
                     style: ElevatedButton.styleFrom(
-                      minimumSize: Size(130, 40), 
+                      minimumSize: const Size(130, 40), 
                       backgroundColor: Colors.transparent,
                     ),
                     child: 
-                      Container(
+                      const SizedBox(
                         width: 5000,
                         height: 100,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Image(image: AssetImage('images/MM.jpg')),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                  Text("Miwa Kasumi", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
-                                  Text("The greatest Jujutsu Sorcerer of all time.") //Description of food truck
-                              ]
-                            )
+                            Flexible(flex: 1, child: Image(image: AssetImage('images/MM.jpg')),),
+                            Expanded(
+                              flex: 1,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                    Text("Miwa Kasumi", style: TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
+                                    Text("The greatest Jujutsu Sorcerer of all time.") //Description of food truck
+                                ]
+                              ),
+                            ),
+                            Flexible(flex: 1, child: Text("Menu", style: TextStyle(fontWeight: FontWeight.bold),))
                           ]
                         )
                       )

@@ -701,7 +701,7 @@ class _Mapview extends State<Mapview> {
                                 bottomLeft: Radius.circular(50.0),
                               ),
                               child: Image(
-                                image: AssetImage('images/corndog.jpg'), 
+                                image: AssetImage('images/corndog.jpeg'), 
                                 fit: BoxFit.cover,
                               ),
                             ),

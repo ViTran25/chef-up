@@ -540,6 +540,7 @@ class _Mapview extends State<Mapview> {
                       fetchRoute(startLocation: userLocation, endLocation: truck1Location);
                     },
                     style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.zero,
                       minimumSize: const Size(130, 40), 
                       backgroundColor: Colors.transparent,
                     ),
@@ -548,8 +549,15 @@ class _Mapview extends State<Mapview> {
                         Expanded(
                           child: Container(
                             height: 100,
-                            child: Image(
-                              image: AssetImage('images/MM.jpg'), 
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(50.0),
+                                bottomLeft: Radius.circular(50.0),
+                              ),
+                              child: Image(
+                                image: AssetImage('images/burger.jpg'), 
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),
@@ -560,13 +568,13 @@ class _Mapview extends State<Mapview> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                  Text("Miwa Kasumi", style: TextStyle(
+                                  Text("Bob's Burgers!", style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,
                                     color: Colors.black,
                                     ),
                                   ), //Name of Food truck
-                                  Text("The greatest Jujutsu Sorcerer of all time.", style: TextStyle(
+                                  Text("Delicious and Quick! Come try us out today!", style: TextStyle(
                                     fontSize: 18,
                                     color: Colors.black,
                                     ),
@@ -605,6 +613,7 @@ class _Mapview extends State<Mapview> {
                       fetchRoute(startLocation: userLocation, endLocation: truck2Location);
                     },
                     style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.zero,
                       minimumSize: const Size(130, 40), 
                       backgroundColor: Colors.transparent,
                     ),
@@ -613,8 +622,15 @@ class _Mapview extends State<Mapview> {
                         Expanded(
                           child: Container(
                             height: 100,
-                            child: Image(
-                              image: AssetImage('images/MM.jpg'), 
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(50.0),
+                                bottomLeft: Radius.circular(50.0),
+                              ),
+                              child: Image(
+                                image: AssetImage('images/taco.jpg'), 
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),
@@ -625,13 +641,13 @@ class _Mapview extends State<Mapview> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                  Text("Miwa Kasumi", style: TextStyle(
+                                  Text("Tony's Tacos", style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,
                                     color: Colors.black,
                                     ),
                                   ), //Name of Food truck
-                                  Text("The greatest Jujutsu Sorcerer of all time.", style: TextStyle(
+                                  Text("Serving Tacos since 1988", style: TextStyle(
                                     fontSize: 18,
                                     color: Colors.black,
                                     ),
@@ -670,6 +686,7 @@ class _Mapview extends State<Mapview> {
                       fetchRoute(startLocation: userLocation, endLocation: truck3Location);
                     },
                     style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.zero,
                       minimumSize: const Size(130, 40), 
                       backgroundColor: Colors.transparent,
                     ),
@@ -678,8 +695,15 @@ class _Mapview extends State<Mapview> {
                         Expanded(
                           child: Container(
                             height: 100,
-                            child: Image(
-                              image: AssetImage('images/MM.jpg'), 
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(50.0),
+                                bottomLeft: Radius.circular(50.0),
+                              ),
+                              child: Image(
+                                image: AssetImage('images/corndog.jpg'), 
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),
@@ -690,13 +714,13 @@ class _Mapview extends State<Mapview> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                  Text("Miwa Kasumi", style: TextStyle(
+                                  Text("Cassie's Corn Dogs", style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,
                                     color: Colors.black,
                                     ),
                                   ), //Name of Food truck
-                                  Text("The greatest Jujutsu Sorcerer of all time.", style: TextStyle(
+                                  Text("Pittsburgh's Authentic Korean Corn Dogs!", style: TextStyle(
                                     fontSize: 18,
                                     color: Colors.black,
                                     ),
@@ -735,6 +759,7 @@ class _Mapview extends State<Mapview> {
                       fetchRoute(startLocation: userLocation, endLocation: truck4Location);
                     },
                     style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.zero,
                       minimumSize: const Size(130, 40), 
                       backgroundColor: Colors.transparent,
                     ),
@@ -743,8 +768,15 @@ class _Mapview extends State<Mapview> {
                         Expanded(
                           child: Container(
                             height: 100,
-                            child: Image(
-                              image: AssetImage('images/MM.jpg'), 
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(50.0),
+                                bottomLeft: Radius.circular(50.0),
+                              ),
+                              child: Image(
+                                image: AssetImage('images/icecream.jpg'), 
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),
@@ -755,13 +787,13 @@ class _Mapview extends State<Mapview> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                  Text("Miwa Kasumi", style: TextStyle(
+                                  Text("Issac's Ice Cream", style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,
                                     color: Colors.black,
                                     ),
                                   ), //Name of Food truck
-                                  Text("The greatest Jujutsu Sorcerer of all time.", style: TextStyle(
+                                  Text("All the ice creams, all the flavors, we've got it!", style: TextStyle(
                                     fontSize: 18,
                                     color: Colors.black,
                                     ),
@@ -800,6 +832,7 @@ class _Mapview extends State<Mapview> {
                       fetchRoute(startLocation: userLocation, endLocation: truck5Location);
                     },
                     style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.zero,
                       minimumSize: const Size(130, 40), 
                       backgroundColor: Colors.transparent,
                     ),
@@ -808,8 +841,15 @@ class _Mapview extends State<Mapview> {
                         Expanded(
                           child: Container(
                             height: 100,
-                            child: Image(
-                              image: AssetImage('images/MM.jpg'), 
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(50.0),
+                                bottomLeft: Radius.circular(50.0),
+                              ),
+                              child: Image(
+                                image: AssetImage('images/banh-mi.jpg'), 
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),
@@ -820,13 +860,13 @@ class _Mapview extends State<Mapview> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                  Text("Miwa Kasumi", style: TextStyle(
+                                  Text("Kieu's Banh Mi", style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,
                                     color: Colors.black,
                                     ),
                                   ), //Name of Food truck
-                                  Text("The greatest Jujutsu Sorcerer of all time.", style: TextStyle(
+                                  Text("The best Vietnamese authentic banh mi!", style: TextStyle(
                                     fontSize: 18,
                                     color: Colors.black,
                                     ),

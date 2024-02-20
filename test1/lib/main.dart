@@ -1,9 +1,9 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:dio/dio.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,76 +11,33 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-  static const trucks = [
-      Marker(
-        width: 30.0,
-        height: 30.0,
-        point: LatLng(40.444990, -79.940640),
-        child: Icon(
-          Icons.local_shipping,
-          color: Colors.red,
-          size: 30.0,
-        )
-      ),
-      Marker(
-        width: 30.0,
-        height: 30.0,
-        point: LatLng(40.444490, -79.943640),
-        child: Icon(
-          Icons.local_shipping,
-          color: Colors.blue,
-          size: 30.0,
-        )
-      ),
-      Marker(
-        width: 30.0,
-        height: 30.0,
-        point: LatLng(40.444019, -79.954590),
-        child: Icon(
-          Icons.local_shipping,
-          color: Colors.purple,
-          size: 30.0,
-        )
-      ),
-      Marker(
-        width: 30.0,
-        height: 30.0,
-        point: LatLng(40.445490, -79.942640),
-        child: Icon(
-          Icons.local_shipping,
-          color: Colors.orange,
-          size: 30.0,
-        )
-      ),
-    ];
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // Enable debug painting features
+      debugShowCheckedModeBanner: false,
+      debugShowMaterialGrid: false,
       title: 'ChefUp',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'ChefUp', trucks: trucks),
+      home: const MyHomePage(title: 'ChefUp'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title, this.trucks});
+  const MyHomePage({super.key, required this.title});
 
   final String title;
-  final trucks;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState(trucks: trucks);
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  _MyHomePageState({this.trucks});
-  final trucks;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('images/background.jpg'),
+              image: const AssetImage('images/background.jpg'),
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
                 Colors.black.withOpacity(0.75), // Adjust opacity as needed
@@ -105,22 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
             )
           ),
           child: Center(
-          // Center is a layout widget. It takes a single child and positions it
-          // in the middle of the parent.
           child: Column(
-            // Column is also a layout widget. It takes a list of children and
-            // arranges them vertically. By default, it sizes itself to fit its
-            // children horizontally, and tries to be as tall as its parent.
-            //
-            // Column has various properties to control how it sizes itself and
-            // how it positions its children. Here we use mainAxisAlignment to
-            // center the children vertically; the main axis here is the vertical
-            // axis because Columns are vertical (the cross axis would be
-            // horizontal).
-            //
-            // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-            // action in the IDE, or press "p" in the console), to see the
-            // wireframe for each widget.
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               ElevatedButton(
@@ -128,12 +70,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Truckview(title: "truck", trucks: trucks)),
+                    MaterialPageRoute(builder: (context) => const Truckview(title: "truck")),
                   );
                 }
               ),
 
-              Text("    "),
+              const Text("    "),
 
               ElevatedButton(
                 child: const Text('User!'),
@@ -141,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   // Navigate to second route when tapped.
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Mapview(title: "map", trucks: trucks)),
+                    MaterialPageRoute(builder: (context) => const Mapview(title: "map")),
                   );
                 },
               ),
@@ -154,83 +96,48 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class Truckview extends StatefulWidget {
-  Truckview({super.key, required this.title, this.trucks});
+  const Truckview({super.key, required this.title});
   final String title;
-  final trucks;
 
   @override
-  State<Truckview> createState() => _Truckview(trucks: trucks);
+  State<Truckview> createState() => _Truckview();
 }
 
 class _Truckview extends State<Truckview> {
-  _Truckview({this.trucks});
-  final trucks;
-
-  late bool servicePermission = false;
-  late LocationPermission permission;
   @override
   Widget build(BuildContext context) {
-
-    Future<Position> _getCurrentLocation() async {
-
-      permission = await Geolocator.checkPermission();
-
-      if(permission == LocationPermission.denied)
-      {
-        permission = await Geolocator.requestPermission();
-      }
-      return await Geolocator.getCurrentPosition();
-    }
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Align(
-          alignment: Alignment.center,
-          child: ElevatedButton(
-            child: const Text("Broadcast my Location"),
-            onPressed: () {
-              _getCurrentLocation().then((position) {
-                trucks.add(
-                  Marker(
-                    point: LatLng(position.latitude, position.longitude), 
-                    width: 30.0,
-                    height: 30.0,
-                    child: Icon(
-                      Icons.local_shipping, color: Color.fromARGB(255, 136, 89, 1)
-                    )
-                  )
-                );
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Mapview(title: "map", trucks: trucks)),
-                );
-              });
-            }
-          )
-        )
-      )
     );
   }
 }
 
 class Mapview extends StatefulWidget {
-  Mapview({super.key, required this.title, this.trucks});
+  const Mapview({super.key, required this.title});
 
   final String title;
-  final trucks;
 
   @override
-  State<Mapview> createState() => _Mapview(trucks: trucks);
+  State<Mapview> createState() => _Mapview();
 }
 
 class _Mapview extends State<Mapview> {
-  LatLng userLocation = LatLng(40.443490, -79.941640);
-  _Mapview({this.trucks});
+  // User location and truck's locations
+  LatLng userLocation = const LatLng(40.441783, -79.956263);
+  LatLng truck1Location = const LatLng(40.444990, -79.940640);
+  LatLng truck2Location = const LatLng(40.444646, -79.954607);
+  LatLng truck3Location = const LatLng(40.444019, -79.954590);
+  LatLng truck4Location = const LatLng(40.445490, -79.942640);
+  LatLng truck5Location = const LatLng(40.445288, -79.953717);
 
+  // Map to store hover state for each marker
+  final Map<LatLng, bool> _markerHoverStates = {};
+
+  // Routing function
+  final List<Marker> markers = [];
   List<LatLng> routeCoordinates = [];
  
   // This is the method for getting a route
@@ -258,22 +165,98 @@ class _Mapview extends State<Mapview> {
         final double lng = coordinate[0];
         routeCoordinates.add(LatLng(lat, lng));
       }
+
+      setState(() {
+        markers.addAll([
+          Marker(
+            width: 30.0,
+            height: 30.0,
+            point: startPoint,
+            child: Container(
+              child: const Icon(
+                Icons.person_2_rounded,
+                color: Colors.lightBlueAccent,
+                size: 30.0,
+              ),
+            ),
+          ),
+          Marker(
+            width: 30.0,
+            height: 30.0,
+            point: endPoint,
+            child: Container(
+              child: const Icon(
+                Icons.location_on,
+                color: Colors.blue,
+                size: 30.0,
+              ),
+            ),
+          ),
+        ]);
+      });
     } else {
       throw Exception('Failed to fetch route');
     }
   }
 
-
   @override
   void initState() {
     super.initState();
+    _getCurrentLocation();
   }
-  final trucks;
+
+  // Method for to handle marker tap events
+  void _onMarkerTapped(LatLng tappedMarker) {
+    // Check if tapped marker is not the user marker
+    if (tappedMarker != userLocation) {
+      routeCoordinates.clear();
+      fetchRoute(startLocation: userLocation, endLocation: tappedMarker);
+    }
+  }
+
+  late Position _currentPosition;
+  // Method for getting the current location of user
+  void _getCurrentLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.best,
+    );
+
+    setState(() {
+      _currentPosition = position;
+    },);
+
+    userLocation = positionToLatLng(_currentPosition);
+  }
+
+  // Method for converting from Position to LatLng
+  LatLng positionToLatLng(Position position) {
+    return LatLng(position.latitude, position.longitude);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
     //Add Header if needed
-  
+      appBar: AppBar(
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(4.0),
+          child: Container(
+              color: const Color.fromARGB(255, 0, 0, 0),
+              height: 4.0,
+          )
+        ),
+        title: const Text('Food Truck Map'),
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.green, Colors.greenAccent],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            )
+          ),
+        ), // Optional background color,
+      ),
       //Main Body for the Web, note that it is written as a column
       body: Column(
         //Direction of the column orientation
@@ -282,13 +265,12 @@ class _Mapview extends State<Mapview> {
           //Items in the column
         children: [
           //First item in the column, the flutter map
-          Container(
-            width:5000,
-            height: 496,
+          Flexible(
+            flex: 3,
             child: FlutterMap(
               
-              options: const MapOptions(
-                initialCenter: LatLng(40.443490, -79.941640),
+              options: MapOptions(
+                initialCenter: LatLng(_currentPosition.latitude, _currentPosition.longitude),
                 initialZoom: 17.2,
               ),
               children: [
@@ -304,10 +286,6 @@ class _Mapview extends State<Mapview> {
                     ),
                   ],
                 ),
-                MarkerLayer(
-                  markers: [
-                  Marker(point: userLocation, width: 30.0, height: 30.0, child: Icon(Icons.person)), ... trucks]
-                ),
                 Align(
                   alignment: Alignment.topLeft,
                   child: ElevatedButton(
@@ -317,12 +295,296 @@ class _Mapview extends State<Mapview> {
                     }
                   ),
                 ),
+                MarkerLayer(
+                  markers: [
+                    Marker(
+                      width: 30.0,
+                      height: 30.0,
+                      point: userLocation,
+                      child: const Icon(
+                        Icons.circle,
+                        color: Color.fromARGB(255, 56, 58, 59),
+                        size: 26.0,
+                      )
+                    ),
+                    Marker(
+                      width: 30.0,
+                      height: 30.0,
+                      point: userLocation,
+                      child: const Icon(
+                        Icons.circle,
+                        color: Colors.blue,
+                        size: 20.0,
+                      ),
+                    ),
+                    Marker(
+                      width: 50.0,
+                      height: 50.0,
+                      point: truck1Location,
+                      child: GestureDetector(
+                        onTap: () {
+                          _onMarkerTapped(truck1Location);
+                        },
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          onEnter: (_) {
+                            setState(() {
+                              _markerHoverStates[truck1Location] = true;
+                            });
+                          },
+                          onExit: (_) {
+                            setState(() {
+                              _markerHoverStates[truck1Location] = false;
+                            });
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            curve: Curves.easeInOut,
+                            transform: Matrix4.identity(),
+                            child: Transform.scale(
+                              scale: _markerHoverStates[truck1Location] ?? false ? 1.5 : 1.0,
+                              child: Stack(
+                                children: [
+                                  Icon(
+                                    Icons.location_on_rounded,
+                                    color: Colors.red,
+                                    size: 50.0,
+                                  ),
+                                  Positioned(
+                                    bottom: 0,
+                                    child: Expanded(
+                                      child: Text("Bob's Burger",
+                                        style: TextStyle(
+                                          color: Colors.black, 
+                                          fontSize: 8.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    )
+                                  )
+                                ]
+                              ),
+                            )
+                          )
+                        )
+                      )
+                    ),
+                    Marker(
+                      width: 50.0,
+                      height: 50.0,
+                      point: truck2Location,
+                      child: GestureDetector(
+                        onTap: () {
+                          _onMarkerTapped(truck2Location);
+                        },
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          onEnter: (_) {
+                            setState(() {
+                              _markerHoverStates[truck2Location] = true;
+                            });
+                          },
+                          onExit: (_) {
+                            setState(() {
+                              _markerHoverStates[truck2Location] = false;
+                            });
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            curve: Curves.easeInOut,
+                            transform: Matrix4.identity(),
+                            child: Transform.scale(
+                              scale: _markerHoverStates[truck2Location] ?? false ? 1.5 : 1.0,
+                              child: Stack(
+                                children: [
+                                  Icon(
+                                    Icons.location_on_rounded,
+                                    color: Colors.blue,
+                                    size: 50.0,
+                                  ),
+                                  Positioned(
+                                    bottom: 0,
+                                    child: Expanded(
+                                      child: Text("Tony's Taco",
+                                        style: TextStyle(
+                                          color: Colors.black, 
+                                          fontSize: 8.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    )
+                                  )
+                                ]
+                              ),
+                            )
+                          )
+                        )
+                      )
+                    ),
+                    Marker(
+                      width: 50.0,
+                      height: 50.0,
+                      point: truck3Location,
+                      child: GestureDetector(
+                        onTap: () {
+                          _onMarkerTapped(truck3Location);
+                        },
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          onEnter: (_) {
+                            setState(() {
+                              _markerHoverStates[truck3Location] = true;
+                            });
+                          },
+                          onExit: (_) {
+                            setState(() {
+                              _markerHoverStates[truck3Location] = false;
+                            });
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            curve: Curves.easeInOut,
+                            transform: Matrix4.identity(),
+                            child: Transform.scale(
+                              scale: _markerHoverStates[truck3Location] ?? false ? 1.5 : 1.0,
+                              child: Stack(
+                                children: [
+                                  Icon(
+                                    Icons.location_on_rounded,
+                                    color: Colors.purple,
+                                    size: 50.0,
+                                  ),
+                                  Positioned(
+                                    bottom: 0,
+                                    child: Expanded(
+                                      child: Text("Cassie's Corn Dogs",
+                                        style: TextStyle(
+                                          color: Colors.black, 
+                                          fontSize: 8.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    )
+                                  )
+                                ]
+                              ),
+                            )
+                          )
+                        )
+                      )
+                    ),
+                    Marker(
+                      width: 50.0,
+                      height: 50.0,
+                      point: truck4Location,
+                      child: GestureDetector(
+                        onTap: () {
+                          _onMarkerTapped(truck4Location);
+                        },
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          onEnter: (_) {
+                            setState(() {
+                              _markerHoverStates[truck4Location] = true;
+                            });
+                          },
+                          onExit: (_) {
+                            setState(() {
+                              _markerHoverStates[truck4Location] = false;
+                            });
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            curve: Curves.easeInOut,
+                            transform: Matrix4.identity(),
+                            child: Transform.scale(
+                              scale: _markerHoverStates[truck4Location] ?? false ? 1.5 : 1.0,
+                              child: Stack(
+                                children: [
+                                  Icon(
+                                    Icons.location_on_rounded,
+                                    color: Colors.orange,
+                                    size: 50.0,
+                                  ),
+                                  Positioned(
+                                    bottom: 0,
+                                    child: Expanded(
+                                      child: Text("Issac's Ice Cream",
+                                        style: TextStyle(
+                                          color: Colors.black, 
+                                          fontSize: 8.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    )
+                                  )
+                                ]
+                              ),
+                            )
+                          )
+                        )
+                      )
+                    ),
+                    Marker(
+                      width: 50.0,
+                      height: 50.0,
+                      point: truck5Location,
+                      child: GestureDetector(
+                        onTap: () {
+                          _onMarkerTapped(truck5Location);
+                        },
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          onEnter: (_) {
+                            setState(() {
+                              _markerHoverStates[truck5Location] = true;
+                            });
+                          },
+                          onExit: (_) {
+                            setState(() {
+                              _markerHoverStates[truck5Location] = false;
+                            });
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            curve: Curves.easeInOut,
+                            transform: Matrix4.identity(),
+                            child: Transform.scale(
+                              scale: _markerHoverStates[truck5Location] ?? false ? 1.5 : 1.0,
+                              child: Stack(
+                                children: [
+                                  Icon(
+                                    Icons.location_on_rounded,
+                                    color: Colors.yellow,
+                                    size: 50.0,
+                                  ),
+                                  Positioned(
+                                    bottom: 0,
+                                    child: Expanded(
+                                      child: Text("Kieu's Banh Mi",
+                                        style: TextStyle(
+                                          color: Colors.black, 
+                                          fontSize: 8.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    )
+                                  )
+                                ]
+                              ),
+                            )
+                          )
+                        )
+                      )
+                    ),
+                  ]
+                ),
                 PolylineLayer(
                     polylines: [
                       Polyline(
                         points: routeCoordinates,
                         color: Colors.blue,
-                        strokeWidth: 3.0,
+                        strokeWidth: 7.0,
                       )
                     ],
                 ),
@@ -333,165 +595,375 @@ class _Mapview extends State<Mapview> {
 
       //The "Menu" for all the food trucks with their pictures and title and descriptions.
       //Edit the containers to will
-          Container(
-            //Dimensions for the ListView
-            width: double.infinity,
-            height: 250,
-
+          Expanded(
+            flex: 1,
             child: ListView(
               //Items in the ListView
               children: [
-
-            ElevatedButton(
-              onPressed: (){
-                routeCoordinates.clear();
-                fetchRoute(startLocation: userLocation, endLocation: trucks[0].point);
-              },
-              style: ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll<Color>(Color.fromARGB(255, 215, 126, 23)),
-                  minimumSize: MaterialStateProperty.all(Size(130, 40)),
-                  elevation: MaterialStateProperty.all(0),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),)),
-                  ),
-              child: 
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  width: 5000,
-                  height: 100,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: 
-                        Image.network(
-                          'images/burger.jpg')
+                  margin: const EdgeInsets.all(3),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.black,
+                      width: 2,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                            Text("Bob's Burgers!", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
-                            Text("      "),
-                            Text("Delicious and Quick! Come try us out today!") //Description of food truck
-        ]
-    )
-]
-          )
-        )
-      ),
-
-            ElevatedButton(
-              onPressed: (){
-                routeCoordinates.clear();
-                fetchRoute(startLocation: userLocation, endLocation: trucks[1].point);
-              },
-              style: ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll<Color>(Color.fromARGB(255, 193, 152, 62)),
-                  minimumSize: MaterialStateProperty.all(Size(130, 40)),
-                  elevation: MaterialStateProperty.all(0),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),)),
+                    gradient: const LinearGradient(
+                      colors: [Colors.red, Colors.yellow],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(55.0),
                   ),
-              child: 
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  width: 5000,
-                  height: 100,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [ClipRRect(
-                      borderRadius: BorderRadius.circular(50),
-                      child: 
-                        Image.network('images/corndog.jpg')),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                            Text("Cassie's Corn Dogs", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
-                            Text("      "),
-                            Text("Pittsburgh's Authentic Korean Corn Dogs!") //Description of food truck
-        ]
-    )
-]
-          )
-        )
-      ),
-
-            ElevatedButton(
-              onPressed: (){
-                routeCoordinates.clear();
-                fetchRoute(startLocation: userLocation, endLocation: trucks[2].point);
-              },
-              style: ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll<Color>(Color.fromARGB(255, 179, 176, 176)),
-                  minimumSize: MaterialStateProperty.all(Size(130, 40)),
-                  elevation: MaterialStateProperty.all(0),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),)),
+                  child: ElevatedButton(
+                    onPressed: (){
+                      routeCoordinates.clear();
+                      fetchRoute(startLocation: userLocation, endLocation: truck1Location);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: const Size(130, 40), 
+                      backgroundColor: Colors.transparent,
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            height: 100,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(50.0),
+                                bottomLeft: Radius.circular(50.0),
+                              ),
+                              child: Image(
+                                image: AssetImage('images/burger.jpg'), 
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            height: 100,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                  Text("Bob's Burgers!", style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                    ),
+                                  ), //Name of Food truck
+                                  Text("Delicious and Quick! Come try us out today!", style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                    ),
+                                  ) //Description of food truck
+                              ]
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: Text("Menu", style: TextStyle(fontWeight: FontWeight.bold)),
+                          )
+                        )
+                      ]
+                    )
                   ),
-              child: 
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  width: 5000,
-                  height: 100,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [ClipRRect(
-                      borderRadius: BorderRadius.circular(50),
-                      child: 
-                        Image.network('images/icecream.jpg')),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                            Text("Issac's Ice Cream", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
-                            Text("      "),
-                            Text("All the ice creams, all the flavors, we've got it!") //Description of food truck
-        ]
-    )
-]
-          )
-        )
-      ),
+                ),
 
-            ElevatedButton(
-              onPressed: (){
-                routeCoordinates.clear();
-                fetchRoute(startLocation: userLocation, endLocation: trucks[3].point);
-              },
-              style: ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll<Color>(Color.fromARGB(255, 192, 225, 84)),
-                  minimumSize: MaterialStateProperty.all(Size(130, 40)),
-                  elevation: MaterialStateProperty.all(0),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),)),
+                Container(
+                  margin: const EdgeInsets.all(3),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.black,
+                      width: 2,
+                      ),
+                    gradient: const LinearGradient(
+                      colors: [Colors.blue, Colors.yellow],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(55.0),
                   ),
-              child: 
+                  child: ElevatedButton(
+                    onPressed: (){
+                      routeCoordinates.clear();
+                      fetchRoute(startLocation: userLocation, endLocation: truck2Location);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: const Size(130, 40), 
+                      backgroundColor: Colors.transparent,
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            height: 100,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(50.0),
+                                bottomLeft: Radius.circular(50.0),
+                              ),
+                              child: Image(
+                                image: AssetImage('images/taco.jpg'), 
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            height: 100,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                  Text("Tony's Tacos", style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                    ),
+                                  ), //Name of Food truck
+                                  Text("Serving Tacos since 1988", style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                    ),
+                                  ) //Description of food truck
+                              ]
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: Text("Menu", style: TextStyle(fontWeight: FontWeight.bold)),
+                          )
+                        )
+                      ]
+                    )
+                  ),
+                ),
+
                 Container(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  width: 1000,
-                  height: 100,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [ClipRRect(
-                      borderRadius: BorderRadius.circular(50),
-                      child: 
-                        Image.network('images/taco.jpg')),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                            Text("Tony's Tacos      ", style: const TextStyle(fontWeight: FontWeight.bold)), //Name of Food truck
-                            Text("Serving Tacos since 1988                                    ") //Description of food truck
-        ]
-    )
-]
-          )
-        )
-      ),
+                  margin: const EdgeInsets.all(3),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.black,
+                      width: 2,
+                      ),
+                    gradient: const LinearGradient(
+                      colors: [Colors.purple, Colors.yellow],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(55.0),
+                  ),
+                  child: ElevatedButton(
+                    onPressed: (){
+                      routeCoordinates.clear();
+                      fetchRoute(startLocation: userLocation, endLocation: truck3Location);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: const Size(130, 40), 
+                      backgroundColor: Colors.transparent,
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            height: 100,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(50.0),
+                                bottomLeft: Radius.circular(50.0),
+                              ),
+                              child: Image(
+                                image: AssetImage('images/corndog.jpeg'), 
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            height: 100,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                  Text("Cassie's Corn Dogs", style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                    ),
+                                  ), //Name of Food truck
+                                  Text("Pittsburgh's Authentic Korean Corn Dogs!", style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                    ),
+                                  ) //Description of food truck
+                              ]
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: Text("Menu", style: TextStyle(fontWeight: FontWeight.bold)),
+                          )
+                        )
+                      ]
+                    )
+                  ),
+                ),
 
+                Container(
+                  margin: const EdgeInsets.all(3),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.black,
+                      width: 2,
+                      ),
+                    gradient: const LinearGradient(
+                      colors: [Colors.orange, Colors.yellow],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(55.0),
+                  ),
+                  child: ElevatedButton(
+                    onPressed: (){
+                      routeCoordinates.clear();
+                      fetchRoute(startLocation: userLocation, endLocation: truck4Location);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: const Size(130, 40), 
+                      backgroundColor: Colors.transparent,
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            height: 100,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(50.0),
+                                bottomLeft: Radius.circular(50.0),
+                              ),
+                              child: Image(
+                                image: AssetImage('images/icecream.jpg'), 
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            height: 100,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                  Text("Issac's Ice Cream", style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                    ),
+                                  ), //Name of Food truck
+                                  Text("All the ice creams, all the flavors, we've got it!", style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                    ),
+                                  ) //Description of food truck
+                              ]
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: Text("Menu", style: TextStyle(fontWeight: FontWeight.bold)),
+                          )
+                        )
+                      ]
+                    )
+                  ),
+                ),
 
+                Container(
+                  margin: const EdgeInsets.all(3),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.black,
+                      width: 2,
+                      ),
+                    gradient: const LinearGradient(
+                      colors: [Color.fromARGB(255, 216, 194, 0), Colors.yellow],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(55.0),
+                  ),
+                  child: ElevatedButton(
+                    onPressed: (){
+                      routeCoordinates.clear();
+                      fetchRoute(startLocation: userLocation, endLocation: truck5Location);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: const Size(130, 40), 
+                      backgroundColor: Colors.transparent,
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            height: 100,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(50.0),
+                                bottomLeft: Radius.circular(50.0),
+                              ),
+                              child: Image(
+                                image: AssetImage('images/banh-mi.jpg'), 
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            height: 100,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                  Text("Kieu's Banh Mi", style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                    ),
+                                  ), //Name of Food truck
+                                  Text("The best Vietnamese authentic banh mi!", style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                    ),
+                                  ) //Description of food truck
+                              ]
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: Text("Menu", style: TextStyle(fontWeight: FontWeight.bold)),
+                          )
+                        )
+                      ]
+                    )
+                  ),
+                ),
               ],
             ),
           )
